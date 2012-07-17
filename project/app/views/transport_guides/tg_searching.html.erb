@@ -1,0 +1,153 @@
+<div class="span-24 last" >
+  <%= form_tag({:action=> 'get_list_tg'}, :remote=>true) do %>
+
+    <fieldset class="span-20 last">
+      <legend>Buscar Guias de Transportes</legend>
+      <div class="msg" >
+        <label class="msg-label">
+          <%=  notice%>
+        </label>
+
+      </div>
+      <ul>
+        <li>
+          <label>Numero de Guia:</label>
+          <%= text_field 'search', 'num_guide', size: '8', maxlength: '8', class: 'only_numbers'%>
+        </li>
+        <div class="clear"></div>
+        <li>
+          <label>Fecha De Creación:</label>
+          <%= text_field 'date_range', 'date_from',id: 'date_from', class: 'i_date'%>
+          </li>
+           <li>
+          <label>Fecha De Creación:</label>
+          <%= text_field 'date_range', 'date_to', id: 'date_to' , class: 'i_date'%>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <label>Cliente:</label>
+            <input id="customer" type="text" size="20" maxlength="20" class="i_autocomplit"></input>
+            <%=hidden_field 'search', 'customer_id'%>
+          </li>
+          <li>
+            <label>Estado:</label>
+            <%=select( 'search',"transport_guide_state_id", @transport_guide_states )%>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <label>Origen:</label>
+            <input id="origin_city" type="text" size="20" maxlength="20" class="i_autocomplit"></input>
+            <%=hidden_field 'search', 'origin_city_id'%>
+          </li>
+          <li>
+            <label>Destino:</label>
+            <input id="destination_city" type="text" size="20" maxlength="20" class="i_autocomplit"></input>
+            <%=hidden_field 'search', 'destination_city_id'%>
+          </li>
+        </ul>
+        <div class="span-24 center prepend-top last" >
+          <%= submit_tag 'Buscar', id: 'search_button' , method: 'post'%>
+          <%= link_to 'Limpiar',tg_searching_transport_guides_path, class: 'limpiar button'%>
+            <%= link_to 'Cancelar' ,'../main_page/index' ,class: 'button', id: 'cancel_button'%>
+            </div>
+
+
+          </fieldset>
+        <%end%>
+        <div id="table_searching" class="span-24">
+          <%= render 'transport_guide_list'  %>
+        </div>
+      </div>
+      <script charset="utf-8" type="text/javascript">
+        //focus en el formulario
+        $("form:not(.filter) :input:visible:enabled:first").focus();
+        //Autocomplite de clientes (clientes)
+        $(function() {
+          // place holder para fechas
+        $("input[class*=i_date]").attr({
+          'placeholder':'(dd-mm-aaaa)...',
+          'size':'12',
+          'maxlength':'12'
+        });
+          $( "input#date_from" ).datepicker({
+            altField: '#actualDate',
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd-mm-yy',
+            monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+              'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+            gotoCurrent: true,
+            yearRange: '1900:2040',
+            onSelect: function( selectedDate ) {
+              $( "input#date_to" ).datepicker( "option", "minDate", selectedDate );
+            }
+          });
+          $( "input#date_to" ).datepicker({
+            altField: '#actualDate',
+            changeMonth: true,
+            changeYear: true,
+            defaultDate: '+1m',
+            dateFormat: 'dd-mm-yy',
+            monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+              'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+            gotoCurrent: true,
+            yearRange: '1900:2040',
+            onSelect: function( selectedDate ) {
+              $( "input#date_from" ).datepicker( "option", "maxDate", selectedDate );
+            }
+          });
+                
+          $('table[class*=tablaIndex]').dataTable({
+            "bScrollCollapse" : true,
+            "bRetrieve": true,
+            "sPaginationType" : "full_numbers",
+            "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+          });
+          var list =[];
+          var i=0;
+      <% @customers.each do |c| %>
+            list[i]={
+              label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+              id: <%= c.id %>};
+            i=i+1;
+      <% end %>
+          $("#customer").autocomplete({
+            source: list,
+            select: function(event, ui) {
+              $("#search_customer_id").val(ui.item.id);
+
+            }
+
+          });
+
+        });
+        $(function(){
+          //AutoComplite de Origenes y destino
+          var list =[];
+          var i=0;
+      <% @cities.each do |c| %>
+            list[i]={
+              label: "<%= c.name%>",
+              id: <%= c.id %> };
+            i=i+1;
+      <% end %>
+          $("#origin_city").autocomplete({
+            source: list,
+            select: function(event, ui) {
+              $("#search_origin_city_id").val(ui.item.id);
+
+            }
+          });
+          $("#destination_city").autocomplete({
+            source: list,
+            select: function(event, ui) {
+              $("#search_destination_city_id").val(ui.item.id);
+
+            }
+          });
+        });
+           
+
+      </script>

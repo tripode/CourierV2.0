@@ -1,0 +1,56 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Hoja de Ruta
+		</legend>
+		<div class="msg" >
+	      <label class="msg-input">
+	        <font color="green" style="font-style: bold"><%=  notice%></font>
+	      </label>
+	
+	    </div>
+	<%= form_for(@routing_sheet) do |f| %>
+	  <ul>
+	  	<li>
+	    	<label>Nro:</label>
+	    	<%= f.text_field :number, size: 15, maxlength: 15, disabled: true%>
+	  	</li>
+	  	<li>
+	  		<label>Fecha:</label>
+   			<%= f.text_field :date, {value: @routing_sheet.format_admission_date, class:'i_fecha', size: 15, maxlength: 12} %>
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li>
+	    	<label>Repartidor:</label>
+	    	<input id="employee" type="text" value="<%= current_user.employee.last_name + " " + current_user.employee.name %>" style="width: 60%" />
+	    	
+	  	</li>
+	  	<li>
+	  		<label>Zona:</label>
+   			<%= f.select :area_id,@area.getAreas(), prompt: 'Seleccionar', id:'area_id' %>
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li style="width: 100%">
+	    	<label>Comentario:</label>
+	    	<%= f.text_field :commentary, size:84, maxlength: 100%>
+	  	</li>
+	  </ul>
+	  </fieldset>
+	 <div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'button_save_id', class: 'disabled', disabled: true%>
+			<%= link_to 'Cancelar',root_url + 'main_page/index' ,class: 'button'%>
+ 	</div>
+</div>
+  
+<% end %>
+<script>
+	var f1 = new LiveValidation('routing_sheet_area_id', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+    var f2 = new LiveValidation('employee', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+    var f3 = new LiveValidation('routing_sheet_number', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f3.add( Validate.Numericality, { notANumberMessage: " " } );
+        f3.add( Validate.Presence, { failureMessage: " " } );
+    var f4 = new LiveValidation('routing_sheet_date', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+</script>

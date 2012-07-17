@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Id:</b>
+  <%= @routing_sheet_detail.id %>
+</p>
+
+<p>
+  <b>Routing sheet:</b>
+  <%= @routing_sheet_detail.routing_sheet_id %>
+</p>
+
+<p>
+  <b>Product:</b>
+  <%= @routing_sheet_detail.product_id %>
+</p>
+
+<p>
+  <b>Who received:</b>
+  <%= @routing_sheet_detail.who_received %>
+</p>
+
+<p>
+  <b>Comentary:</b>
+  <%= @routing_sheet_detail.comentary %>
+</p>
+
+<p>
+  <b>Reason:</b>
+  <%= @routing_sheet_detail.reason_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_routing_sheet_detail_path(@routing_sheet_detail) %> |
+<%= link_to 'Back', routing_sheet_details_path %>

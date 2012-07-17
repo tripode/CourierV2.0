@@ -1,0 +1,18 @@
+<%= fields_for "@receiver[:receiver_addresses]" do %>
+<ul class="field-list">
+	<div>
+		<li>
+			<%= label_tag :label, "Lugar" %>
+			<%= text_field_tag :label %>
+		</li>
+		<li>
+			<%= label_tag :city, "Ciudad" %>
+			<%= text_field_tag :city %>
+		</li>
+		<li>
+			<%= label_tag :address, "Dirección" %>
+			<%= text_field_tag :address %>
+		</li>
+    </div>
+</ul>
+

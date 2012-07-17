@@ -1,0 +1,43 @@
+<div class="span-24 left">
+<div class="subtitle">
+	 <h4>Descripcion completa del cliente</h4>
+</div>
+<p id="notice"><%= notice %></p>
+<p>
+  <b>Empresa:</b>
+  <%= @customer_company.company_name %>
+</p>
+
+<p>
+  <b>Ruc:</b>
+  <%= @customer_company.ruc %>
+</p>
+
+<p>
+  <b>Direccion:</b>
+  <%= @customer_company.address %>
+</p>
+
+
+<p>
+  <b>Celular:</b>
+  <%= @customer_company.mobile_number %>
+</p>
+
+<p>
+  <b>Telefono:</b>
+  <%= @customer_company.phone_number %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @customer_company.email %>
+</p>
+
+<p>
+  <b>Tipo de Cliente:</b>
+  <%= @customer_company.customer_type.type_name%>
+</p>
+
+<%= link_to 'Regresar', new_customer_company_path %>
+</div>

@@ -1,0 +1,33 @@
+<h1>Listing routing_sheet_details</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Routing sheet</th>
+    <th>Product</th>
+    <th>Who received</th>
+    <th>Comentary</th>
+    <th>Reason</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @routing_sheet_details.each do |routing_sheet_detail| %>
+  <tr>
+    <td><%= routing_sheet_detail.id %></td>
+    <td><%= routing_sheet_detail.routing_sheet_id %></td>
+    <td><%= routing_sheet_detail.product_id %></td>
+    <td><%= routing_sheet_detail.who_received %></td>
+    <td><%= routing_sheet_detail.comentary %></td>
+    <td><%= routing_sheet_detail.reason_id %></td>
+    <td><%= link_to 'Show', routing_sheet_detail %></td>
+    <td><%= link_to 'Edit', edit_routing_sheet_detail_path(routing_sheet_detail) %></td>
+    <td><%= link_to 'Destroy', routing_sheet_detail, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Routing sheet detail', new_routing_sheet_detail_path %>

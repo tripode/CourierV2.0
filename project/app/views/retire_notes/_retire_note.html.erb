@@ -1,0 +1,222 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Nota de Retiro
+		</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+		</div>
+		<%= form_for(@retire_note, remote:true) do |f| %>
+		<ul>
+	      <li>
+		    <label>* N°:</label>
+		    <%= f.text_field :number, id: 'number_id', style: 'width: 20%', :maxlength => 10 %>
+		  </li>
+		  <li>
+		    <label>* Fecha Registro:</label>
+		    <%= f.text_field :date,id: 'date', value: @retire_note.format_date,style: 'width: 28%', class:'i_fecha', disabled: true %>
+		  </li>
+		  <div class="clear"></div>
+		  
+		  <li>
+		    <label for="customer">* Cliente:</label>
+		    <input id="customer" type="text" style="width: 60%" class="i_autocomplit"  />
+			<%= f.hidden_field :customer_id, id: 'customer_id_hidden' %>         
+		  </li>
+		  <li>
+		    <label>* Fecha Vence:</label>
+		    <%= f.text_field :expiration_date, id:'expiration_date',value: @retire_note.format_date,style: 'width: 28%', class:'i_fecha'%>
+		  </li>
+		  <div class="clear"></div>
+		  <li>
+		    <label>* Servicio:</label>
+		   	<%= f.select :service_type_id, @retire_note.getTipoServicios,id: 'service_type_id'%>
+		  </li>
+		  <br />
+		   <div class="clear"></div>
+	       <div class="subtitle">
+            	<h4>Detalles del Producto</h4>
+          	</div>
+          <div class="clear"></div>
+			<br />
+			<li>
+		    	<label>* Tipo Producto:</label>
+		    	<%= f.select :product_type_id, @retire_note.getTipoProductos, prompt: "-- Seleccionar--", id:'product_type_id'%>
+		  	</li>
+		  	<li>
+		  		<label>* Ciudad:</label>
+		    	<%= f.select :city_id, @retire_note.getCiudades, prompt: "-- Seleccionar--", id:'city_id'%>
+		  	</li>
+		  	<div class="clear"></div>
+		  	<li>
+		  		<label>* Cantidad:</label>
+		    	<%= f.text_field :amount, id: 'amount_id', style: 'width: 15%',:maxlength => 4 %>
+		  	</li>
+		  	<li>
+		  		<label>* Precio Unit:(Gs.)</label>
+		    	<%= f.text_field :unit_price, id: 'unit_price_id', style: 'width: 15%',:maxlength => 7%>
+		  	</li>
+		  	<div class="clear"></div>
+		  	<li>
+		  		<label>Descripcion:</label>
+		    	<%= f.text_field :description,style: 'width: 65%',:maxlength => 50,:size=> 30  %>
+		  	</li>
+		  	<li id="retire_note_state">
+		  		<label>Estado:</label>
+		  		<%= f.select :retire_note_state_id, @retire_note.getEstados().keep_if{|s|s[0].downcase == "en proceso" || s[0].downcase == "cancelado" }, prompt: "-- Seleccionar--"%>
+		  	</li>
+		  	<div class="clear"></div> 
+		  	
+		</ul>
+		
+	</fieldset>
+	<div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'save_button' %>
+			<%= link_to 'Limpiar',new_retire_note_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+	
+	$("input[class*=i_fecha]").datepicker({
+          altField: '#actualDate',
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'dd-mm-yy',
+          monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+                            'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+          dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+          gotoCurrent: true,
+          yearRange: '1900:2040'
+							  
+        });
+	// place holder para fechas
+        $("input[class*=i_fecha]").attr({
+          'placeholder':'(dd-mm-aaaa)...',
+          'size':'12',
+          'maxlength':'12'
+        });
+	
+	
+	$("#retire_note_state").hide();
+    //Autocomplite de clientes
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @customers.each do |c| %>
+		 	list[i]={
+		 		label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#customer").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#customer_id_hidden").val(ui.item.id); 
+			}
+		});
+		if($("#customer_id_hidden").val()!= "") {
+			
+			//Cuando el id del cliente no es vacio se setea el nombre del cliente en el campo
+			//Esto se usa cuando se edita la nota de retiro, al hacer click en edit setea el nombre del cliente 
+			$("#save_button").val("Actualizar");
+			$("#retire_note_state").show();
+			var id=$("#customer_id_hidden").val();
+			var name= ""
+			// busca el empleado dentro de la lista
+			$(list).each(function(index,element){
+				if(element.id == id){
+					name=element.label
+					return true
+				}
+			})
+			//setea el nombre del empleado en el campo employee
+			$("#customer").val(name);
+		}
+	});
+	//Onfocus para que el cursor este sobre el input numero de retiro
+	$('#number_id').focus();
+
+	//Cuando cambia se selecciona la ciudad se setea el precio por defecto
+	//teniendo el cuenta el customer_id, el product_type_id y el city_id
+	$("#retire_note_city_id").change(function(){
+		$.post("<%= getPrice_retire_notes_path %>",
+		{"city_id": $(this).val(), 
+		"customer_id": $("#customer_id_hidden").val(), 
+		"product_type_id": $("#retire_note_product_type_id").val(),
+		"current_date": $("#date").val() },
+		function(price){
+			$("#unit_price_id").val(price.value);
+			
+		},"json");
+	});
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+     
+     $(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#number_id").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+		
+		$("#amount_id").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+		
+		$("#unit_price_id").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+     
+		//Validaciones
+        var f1 = new LiveValidation('number_id', { validMessage: " ",wait: 100 });
+        f1.add( Validate.Numericality, { notANumberMessage: "Debe ser un Numero" } );
+        f1.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f2 = new LiveValidation('customer', { validMessage: " ", wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f3 = new LiveValidation('amount_id', { validMessage: " ",wait: 500 });
+        f3.add( Validate.Numericality, { notANumberMessage: "Debe ser un Numero" } );
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f4 = new LiveValidation('unit_price_id', { validMessage: " ", wait: 500 });
+        f4.add( Validate.Numericality, { notANumberMessage: "Debe ser un Numero" } );
+        f4.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f5 = new LiveValidation('date', { validMessage: " ", wait: 500 });
+        f5.add( Validate.Presence, { failureMessage: " " } ); 
+        
+        var f6 = new LiveValidation('expiration_date', { validMessage: " ", wait: 500 });
+        f6.add( Validate.Presence, { failureMessage: " " } ); 
+        
+        var f7 = new LiveValidation('retire_note_service_type_id', { validMessage: " ", wait: 500 });
+        f7.add( Validate.Presence, { failureMessage: " " } ); 
+        
+        var f8 = new LiveValidation('retire_note_product_type_id', { validMessage: " ", wait: 500 });
+        f8.add( Validate.Presence, { failureMessage: " " } ); 
+        
+        var f9 = new LiveValidation('retire_note_city_id', { validMessage: " ", wait: 500 });
+        f9.add( Validate.Presence, { failureMessage: " " } ); 
+        
+       
+</script>

@@ -1,0 +1,102 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Registrar Cliente Individual
+		</legend>
+		<%= form_for(@customer) do |f| %>
+		  <% if @customer.errors.any? %>
+		    <div id="error_explanation">
+		      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+		
+		      <ul>
+		      <% @customer.errors.full_messages.each do |msg| %>
+		        <li><%= msg %></li>
+		      <% end %>
+		      </ul>
+		    </div>
+		  <% end %>
+		<ul>
+			<li>
+				<label>* Nombre:</label>
+		    	<%= f.text_field :name, id: 'i_name', :maxlength => 30 %>	
+			</li>
+			<li>
+				<label>* Apellido:</label>
+		    	<%= f.text_field :last_name, id: 'i_last_name', :maxlength => 30 %>	
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Ruc:</label>
+		    	<%= f.text_field :ruc,:maxlength => 14 %>	
+			</li>
+			<li>
+				<label>* Direccion:</label>
+		    	<%= f.text_field :address, id: 'i_address', :maxlength => 100, :size=>30 %>	
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>CI:</label>
+		    	<%= f.text_field :num_identify,id:'num_identify',:maxlength => 12%>	
+			</li>
+			<li>
+				<label>Celular:</label>
+		    	<%= f.text_field :mobile_number,:maxlength => 20 %>	
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>*Telefono:</label>
+		    	<%= f.text_field :phone_number, id:'i_phone_number',:maxlength => 20 %>	
+			</li>
+			<li>
+				<label>*Email:</label>
+		    	<%= f.text_field :email, id:'i_email',:maxlength => 60, :size=>30 %>	
+			</li>
+			<div class="clear"></div>
+			
+		</ul>
+	
+	</fieldset>
+	<div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'save_button' %>
+			<%= link_to 'Limpiar',new_customer_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+///focus en el formulario
+          $("form:not(.filter) :input:visible:enabled:first").focus();
+	
+	$('.limpiar').click(function() {
+		$('input[type=text]').val("");
+		$('input[type=number]').val("");
+		$('#form_notice').hide();
+
+	});
+	
+	$(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#num_identify").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+	//validaciones
+        var f1 = new LiveValidation('i_name', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+        var f2 = new LiveValidation('i_last_name', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        var f3 = new LiveValidation('i_phone_number', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        var f4 = new LiveValidation('i_email', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f4.add( Validate.Presence,{ failureMessage: " " });
+        f4.add( Validate.Email, { failureMessage: "Invalido" }  );
+        var f5 = new LiveValidation('i_address', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f5.add( Validate.Presence, { failureMessage: " " } );
+	
+</script>
+

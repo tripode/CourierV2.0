@@ -1,0 +1,16 @@
+<div class="span-24">
+    <% if @messages %>
+      <% @messages.each do |key, value| %>
+        <div class=<%= key %> >
+          <%= value %>
+        </div>
+      <% end %>
+    <% end %>
+</div>
+<div id="receiver_form">
+  <%= render 'complete_form' %>
+</div>
+
+<div id="receiver_table">
+	<%= render 'table'%>
+</div>

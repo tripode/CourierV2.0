@@ -1,0 +1,41 @@
+<div class="span-24 left">
+<fieldset>
+	<%= form_tag({:action => 'add_product'}, :remote => true) do%>
+	<ul>
+		<li>
+			<label>Codigo de Barra:</label>
+			<%= text_field_tag :bar_code,nil, id: 'bar_code',size: 20, :maxlength => 25%>
+			<%= submit_tag '',id: 'button_add_detail',class:"add"%>
+		</li>
+		
+	</ul>
+	<% end %>
+	<div id="div_routing_sheet_detail" class="span-22 left">
+		<%= render 'detail'%>
+	</div>
+</fieldset>
+</div>
+<script>
+	$(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#bar_code").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+	//Submit cuando se presiona enter en el campo bar_code 
+     $("#bar_code").keypress(function(e) {
+        if(e.which == 13) {
+            jQuery(this).blur();
+            jQuery('#button_add_detail').focus().click();
+        }
+      });
+	//Validacion del codigo de barra
+     var f1 = new LiveValidation('bar_code', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Numericality, { notANumberMessage: " " } );
+        f1.add( Validate.Presence, { failureMessage: " " } );
+</script>

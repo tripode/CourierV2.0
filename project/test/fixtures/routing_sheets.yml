@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  area_id: 1
+  employee_id: 1
+  date: 2012-03-13
+  total_amount: 1
+  routing_sheet_state_id: 1
+
+two:
+  area_id: 1
+  employee_id: 1
+  date: 2012-03-13
+  total_amount: 1
+  routing_sheet_state_id: 1

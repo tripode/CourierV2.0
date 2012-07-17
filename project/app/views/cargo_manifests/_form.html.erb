@@ -1,0 +1,180 @@
+<div>
+  <%= form_for(@cargo_manifest) do |f| %>
+    <fieldset>
+      <legend>Crear Manifiesto de Carga</legend>
+      <div class="msg" >
+        <div id="form_notice">
+        <input id="notice" size="100" value="<%= notice %>"  disabled="disabled" style="background:none; border:none; color: green; font-weight: bold" />
+      </div>
+      </div>
+
+      <div class="clear"></div>
+      <% if @cargo_manifest.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@cargo_manifest.errors.count, "error") %> prohibited this cargo_manifest from being saved:</h2>
+
+          <ul>
+            <% @cargo_manifest.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <ul style="padding-left: 0;">
+          <li>
+            <label>* N&#176;:</label>
+            <input maxlength="10"  size="10" disabled="disabled" id="manifest_num_input" type="text"></input>
+            <%= f.hidden_field :manifest_num, id: 'manifest_num_hidden' %>
+          </li>
+          <li>
+            <label>* Fecha:</label>
+            <%= f.text_field :created_at,{value: @cargo_manifest.format_date, class:'i_fecha', maxlength: 12, size: 12}%>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <%= f.hidden_field :employee_id, {value: current_user.employee.id} %>
+          </li>
+          <li>
+            <label>* Origen: </label>
+            <input id="origin_city" type="text" class="i_autocomplit" />
+            <%= f.hidden_field :origin_city_id, id: 'origin_city_id_hidden', name: 'lista[origin]'  %>
+          </li>
+          <li>
+            <label>* Destino:</label>
+            <input id="destination_city" type="text" class="i_autocomplit" />
+            <%= f.hidden_field :destiny_city_id, id: 'destination_city_id_hidden', name: 'lista[destino]' %>
+          </li>
+          <div class="clear"></div>
+          <div  class="span-11 center last">
+               <%=link_to 'Generar',get_transport_guides_cargo_manifests_path, id: 'button_generate_manifests', remote: 'true',method: 'post', class: 'button' %>
+          </div>
+          <div class="clear"></div>
+          <br/>
+          <li>
+          <div id="table_transport_guides"><%=render 'list_transport_guides'%></div>
+          </li>
+          <li style="width:100%" class="span-11 prepend-3 last">
+              <label>Total de Guias:</label>
+              <%= f.text_field :total_guides, maxlength: 5, size: 5, disabled: 'disabled' %>
+              <label>Total de Piezas:</label>
+              <%= f.text_field :total_products, maxlength: 5, size: 5, disabled: 'disabled' %>
+              <label> Total Peso (Kg):</label>
+              <%= f.text_field :total_weight, maxlength: 5, size: 5, disabled: 'disabled' %>
+          </li>
+          </ul>
+          <input type="hidden" id="hidden_print" value="not" name="data[print]"></input>
+          <div class="span-11 center prepend-top las">
+                <%= f.submit @btt_guardar, id:'save_button'%>
+                <%= link_to 'Limpiar',new_cargo_manifest_path, class: 'limpiar button'%>
+              <%if @option_print==true%>
+                <%= link_to 'Imprimir',generate_cargo_manifest_pdf_cargo_manifests_path(id: @cargo_manifest.id, format: 'pdf'), class: 'button', method: 'post'%>
+              <%end%>
+                <%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+          </div>
+      </fieldset>
+      <% end %>
+</div>
+            <script type="text/javascript">
+              var f1 = new LiveValidation('origin_city', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+              f1.add( Validate.Presence, { failureMessage: " " } );
+              var f2 = new LiveValidation('destination_city', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+              f2.add( Validate.Presence, { failureMessage: " " } );
+              var f3 = new LiveValidation('cargo_manifest_created_at', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+              f3.add( Validate.Presence, { failureMessage: " " } );
+             // var f3 = new LiveValidation('cargo_manifest_manifest_num', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+             // f3.add( Validate.Numericality, { notANumberMessage: "Debe ser un Numero" } );
+             // f3.add( Validate.Presence, { failureMessage: " " } );
+
+              $(function() {
+                $("input").focus(function () {
+                    $("#notice").val("");
+                  })
+        //        $('#save_button').click(function(){
+          //        alert("Se generara el pdf del manifiesto");
+            //    });
+                $('#manifest_num_input').val($('#manifest_num_hidden').val());
+
+
+
+
+
+                //focus en el formulario
+               // $("form:not(.filter) :input:visible:enabled:first").focus();
+
+                //AutoComplite de Origenes
+                var list =[];
+                var i=0;
+            <% @cities.each do |c| %>
+              list[i]={
+              label: "<%= c.name%>",
+              id: <%= c.id %> };
+              i=i+1;
+            <% end %>
+            $("#origin_city").autocomplete({
+            source: list,
+            select: function(event, ui) {
+            $("#origin_city_id_hidden").val(ui.item.id);
+
+            }
+            });
+            $("#destination_city").autocomplete({
+            source: list,
+            select: function(event, ui) {
+            $("#destination_city_id_hidden").val(ui.item.id);
+
+            }
+            });
+
+            if($("#origin_city_id_hidden").val()!= "") {
+            //Cuando el id de la Ciudad de origen no es vacio se setea el nombre de la ciudad en el campo
+            //Esto se usa cuando se edita la Guia de Transporte,
+            //al hacer click en edit setea La ciudad de origen
+            var id=$("#origin_city_id_hidden").val();
+            var name= ""
+            // busca la ciudad dentro de la lista
+            $(list).each(function(index,element){
+            if(element.id == id){
+            name=element.label
+            return true
+            }
+            })
+            $("#origin_city").val(name);
+            }
+
+            if($("#destination_city_id_hidden").val()!= "") {
+
+            //Esto se usa cuando se edita la Guia de Transporte,
+            //al hacer click en edit setea La ciudad de destino
+                
+            var id=$("#destination_city_id_hidden").val();
+            var name= ""
+            $(list).each(function(index,element){
+            if(element.id == id){
+            name=element.label
+            return true
+            }
+            })
+            $("#destination_city").val(name);
+            }
+            $("#button_generate_manifests").click(function(){
+            var origin = $("#origin_city_id_hidden").val();
+            var destiny =$("#destination_city_id_hidden").val();
+            var href= $(this).attr("href");
+            var index = href.indexOf("?");
+            if(index>=0){
+            var href2 = href.substring(0,index);
+            href=href2;
+            }
+            $(this).attr("href",href +
+            "?origin="+origin +
+            "&destiny="+destiny);
+            });
+    
+
+   
+
+
+            });
+       
+            </script>

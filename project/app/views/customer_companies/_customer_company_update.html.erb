@@ -1,0 +1,88 @@
+<div class="span-24 last">
+<fieldset>
+	<legend>
+		Registrar Cliente
+	</legend>
+	<%= form_for @customer_company, :url => customer_company_path(@customer_company) do |f| %>
+	  <% if @customer_company.errors.any? %>
+	    <div id="error_explanation">
+	      <h2><%= pluralize(@customer_company.errors.count, "error") %> prohibited this customer from being saved:</h2>
+	
+	      <ul>
+	      <% @customer_company.errors.full_messages.each do |msg| %>
+	        <li><%= msg %></li>
+	      <% end %>
+	      </ul>
+	    </div>
+	  <% end %>
+	<ul>
+		<li>
+			<label>* Empresa:</label>
+	    	<%= f.text_field :company_name, id: 'i_company_name',:minlength => 5, :maxlength => 100, :size=> 30  %>	
+		</li>
+		
+		
+		<li>
+			<label>Ruc:</label>
+	    	<%= f.text_field :ruc,:maxlength => 14 %>	
+		</li>
+		<div class="clear"></div>
+		<li>
+			<label>* Direccion:</label>
+	    	<%= f.text_field :address, id:'i_address',:minlength => 5, :maxlength => 100, :size=>30 %>	
+		</li>
+		<li>
+			<label>* Email:</label>
+	    	<%= f.text_field :email, id:'i_email',:minlength => 5, :maxlength => 100, :size=>30 %>	
+		</li>
+		<div class="clear"></div>
+		<li>
+			<label>Celular:</label>
+	    	<%= f.text_field :mobile_number,:maxlength => 20 %>	
+		</li>
+		
+		<li>
+			<label>*Telefono:</label>
+	    	<%= f.text_field :phone_number, id:'phone_number',:maxlength => 20 %>	
+		</li>
+		<div class="clear"></div>
+	</ul>
+
+</fieldset>
+<div class="span-24 center last" >
+			<%= f.submit 'Actualizar' %>
+			<%= link_to 'Limpiar',new_customer_company_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index', class: 'button'%>
+</div>
+<% end %>
+</div>
+<script>
+	
+	$("input[class*=i_fecha]").datepicker({
+		altField : '#actualDate',
+		appendText : '(dd-mm-yyyy)',
+		changeMonth : true,
+		changeYear : true,
+		dateFormat : 'dd-mm-yy',
+		dayNamesMin : ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+		gotoCurrent : true,
+		yearRange : '1900:2012',
+		showOn : "button"
+
+	});
+	//Onfocus para que el cursor este sobre el input company_name
+	$('#i_company_name').focus();
+	
+	//validaciones
+        var f1 = new LiveValidation('i_company_name', { validMessage: " ", wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+       
+        var f2 = new LiveValidation('i_phone_number', { validMessage: " ", wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        var f3 = new LiveValidation('i_email', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f3.add( Validate.Presence,{ failureMessage: " " });
+        f3.add( Validate.Email, { failureMessage: "Invalido" }  );
+        var f4 = new LiveValidation('i_address', { validMessage: " ", wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+</script>
+

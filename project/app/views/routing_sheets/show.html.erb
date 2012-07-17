@@ -1,0 +1,50 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Hoja de Ruta
+		</legend>
+
+	  <ul>
+	  	<li>
+	    	<label>Nro:</label>
+	    	<input type="text" value="<%= @routing_sheet.number%>" size="15" disabled="true" />
+	  	</li>
+	  	<li>
+	  		<label>Fecha:</label>
+	  		<input type="text" value="<%= @routing_sheet.date%>" size="15" disabled="true"/>
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li>
+	    	<label>Repartidor:</label>
+	    	<input id="employee" type="text" value="<%= @routing_sheet.employee.last_name + ' ' + @routing_sheet.employee.name  %>" style="width: 60%" disabled="true" />
+	    	
+	  	</li>
+	  	<li>
+	  		<label>Zona:</label>
+	  		<input type="text" value="<%=@routing_sheet.area.area_name %>" disabled="true" />
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li style="width: 100%">
+	    	<label>Comentario:</label>
+	    	<input type="text" value="<%=@routing_sheet.commentary %>"  disabled="true" size="88" />
+	    	
+	  	</li>
+	 	<li>
+	    	<label>Estado:</label>
+	    	<input type="text" value="<%= @routing_sheet.routing_sheet_state.state_name %>" disabled="true" />
+	  	</li>
+	  
+	  	
+	  </ul>
+	  </fieldset>
+	 
+</div>
+
+<div>
+	<%= render 'routing_sheet_detail' %>
+</div>
+<div class="span-24 center last" >
+		<%= link_to 'Regresar', routing_sheets_path,  class: 'button' %>
+		<%=  link_to 'Ver para imprimir',routing_sheet_path(@routing_sheet, :format => "pdf"), class: 'button'   %>
+</div>
+

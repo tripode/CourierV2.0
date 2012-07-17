@@ -1,0 +1,84 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Buscar Hoja de Ruta
+		</legend>
+	
+	<%= form_tag({:action => 'search'}, :remote => true) do  %>
+	  <ul>
+	  	<li>
+	  		<label>Fecha Desde:</label>
+   			<%= text_field_tag :date_start,nil, {value: @routing_sheet.format_admission_date, class:'i_fecha', size: 15, maxlength: 12} %>
+	  	</li>
+	  	<li>
+	  		<label>Fecha Hasta:</label>
+   			<%= text_field_tag :date_end,nil, {value: @routing_sheet.format_admission_date, class:'i_fecha', size: 15, maxlength: 12} %>
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li>
+	    	<label>Nro:</label>
+	    	<%= text_field_tag :number, nil,size: 15, maxlength: 15, id:'number_id'%>
+	  	</li>
+	  	<li>
+	    	<label>Repartidor:</label>
+	    	<input id="employee" type="text" style="width: 50%" value="" class="i_autocomplit"  />
+	    	<%=  hidden_field_tag :employee_id,nil, id:'employee_id_hidden' %>
+	    	
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li>
+	  		<label>Zona:</label>
+   			<%= select_tag :area_id,options_from_collection_for_select(Area.all,"id","area_name"), prompt: 'Seleccionar' %>
+	  	</li>
+	    <li>
+	    	<label>Estado:</label>
+	    	<%= select_tag :routing_sheet_state_id,options_from_collection_for_select(RoutingSheetState.all,"id","state_name"), prompt: 'Seleccionar'%>
+	  	</li>
+	  </ul>
+	  </fieldset>
+	 
+</div>
+  <div class="span-24 center last" >
+			<%= submit_tag 'Buscar', id: 'button_search_id'%>
+			<%= link_to 'Limpiar', routing_sheets_path, class: 'button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+ </div>
+<% end %>
+
+
+<script>
+	$('#number_id').focus();
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @employees.each do |e| %>
+		 	list[i]={
+		 		label: "<%= e.last_name + ' ' + e.name %>",
+		 		id: <%= e.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#employee").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+
+				$("#employee_id_hidden").val(ui.item.id); 
+			}
+		});
+		
+	});
+
+	$(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#number_id").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+	var f1 = new LiveValidation('number_id', { validMessage: " ", onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Numericality, { notANumberMessage: "Ingresar numero" } );
+</script>

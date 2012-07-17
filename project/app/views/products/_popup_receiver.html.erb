@@ -1,0 +1,144 @@
+<div id="content">
+    <div class="span-15">
+        <div class="span-15 last header">
+          <p class="subtitle span-15 last">Datos personales</p>
+          <fieldset>
+              <%= text_field :receiver, :full_name, :maxlength => '50', :size => 40, :placeholder => 'nombre y apellido', remote: true%>
+              <%= text_field :receiver, :document_number, :maxlength => '20', :placeholder => 'nº de documento', remote: true%>
+          </fieldset>
+        </div>
+        <p class="subtitle span-15 last">agregar direcciones</p>
+        <div class="span-15 last">
+          <fieldset>
+              <%= text_field :receiver, :place, :maxlength => '20', :placeholder => 'lugar' %>
+              <input id="city" type="text" size="40" placeholder="ciudad"  />
+              <%= hidden_field_tag :city_id,nil, id: 'h-city' %>
+              <%= text_field :receiver, :address, :maxlength => '150',:size => 64, :placeholder => 'dirección' %>
+          </fieldset>
+        </div>
+          <p class="prepend-11 span-3 last"><%= link_to 'agregar', '#', id: 'add-address-link', class: 'button'%></p>
+
+        <div class="all-address span-15 last">
+          <table>
+            <thead>
+                    <tr>
+                            <th>Lugar</th>
+                            <th>Ciudad</th>
+                            <th>Dirección</th>
+                            <th></th>
+                    </tr>
+            </thead>
+            <tbody id="all-address">
+            </tbody>
+          </table>
+        </div>
+        <div class="save prepend-11 span-2 last">
+            <%= link_to 'guardar','#', id: 'save-receiver-link', class: 'button' %>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+      /*esta funcion actualiza agrega evento onclick para cada link de borrar*/
+      function updateDeleteLinks(){
+        $('a.pullout').click(function(){
+          $(this).parent().parent().remove();
+        });
+      }
+      
+      var counter = 0;
+      $('#add-address-link').click(function(event){
+        event.preventDefault();
+        var place = $('#receiver_place').val();
+        if(place!=''){
+            var city_name = $('#city').val();
+            var city_id = $('#h-city').val();
+            var address = $('#receiver_address').val();
+                    //alert('sera');
+                    //"<td>"+place+"<input type='hidden' name='receiver[receiver_addresses_attributes]["+counter+"][label]' value='"+place+"'></td>";
+                    var html = "<tr><td>"+place+"<input type='hidden' class='addresses' name='addresses["+counter+"][place]' value='"+place+"'/></td>"+
+                                   "<td>"+city_name+"<input type='hidden' class='addresses' name='addresses["+counter+"][city_id]' value='"+city_id+"'/></td>"+
+                                   "<td>"+address+"<input type='hidden' class='addresses' name='addresses["+counter+"][address]' value='"+address+"'/></td>"+
+                                   "<td>"+"<%= escape_javascript(link_to(image_tag('borrar2.gif'),'#', class: 'pullout'))%>"+"</td></tr>";
+                    $('#all-address').append(html);
+                    $('#receiver_place').val('');
+                    $('#city').val('');
+                    $('#h-city').val('');
+                    $('#receiver_address').val('');
+                    counter++;
+                    updateDeleteLinks();
+            }
+	    
+      });
+      //Funcion que guarda el receiver nuevo
+      /**$('#save-receiver-link').click(function(event){
+        alert('test');
+        event.preventDefault();
+        var receiver_name = "receiver_name="+$("#receiver_full_name").val()+"&";
+        var document = "document="+$("#receiver_document_number").val()+"&";
+        var data = receiver_name+document;
+        $("input.addresses").each(function(){
+          data+=$(this).attr('name')+"="+$(this).val()+"&";
+        });
+        //Este metodo llama a la funcion para guardar el receiver
+        $.post("<%= save_receiver_products_path %>",
+				data,
+				function(response){
+					//Si tuvo exito se actualiza
+					cerrarYActualizar();
+				},"json");
+        
+        
+       
+      });*/
+    </script>
+    
+    <script type="text/javascript">
+      //autocomplete para ciudades
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @cities.each do |c| %>
+		 	list[i]={
+		 		label: "<%= c.name %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#city").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#h-city").val(ui.item.id); 
+			}
+		});
+	});
+        
+    </script>
+    <script type="text/javascript">
+        /* en estes script se habilita o desabilita los botones agregar o guardar*/
+        function enableButton(button,enable){
+          if(enable){
+            $(button).removeClass('disabled').attr('disabled',false);
+          }else{
+            $(button).addClass('disabled').attr('disabled',true);
+          }
+        }
+        function verify(){
+          var name = ($("#receiver_full_name").val().length > 0);
+          var place = ($("#receiver_place").val().length > 0);
+          var city = ($("#h-city").val().length > 0);
+          var address = ($("#receiver_address").val().length > 0);
+          var addresses = ($("#all-address").children().length > 0);
+
+          enableButton("#add-address-link", (city && address && place));
+          enableButton("#save-receiver-link",(name && addresses));
+        }
+        $(document).ready(function(){
+          $("input").click(function(){
+            verify();
+          }).keyup(function(){
+            verify();
+          });
+          
+          setInterval("verify()", 1000);
+        });
+    </script>

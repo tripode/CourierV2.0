@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Project</title>
+		<!-- Se anexa los archivos del Blue Print-->
+		<%= stylesheet_link_tag "bp/screen" %>
+
+		<%= stylesheet_link_tag "default" %>
+		<%= stylesheet_link_tag "jqueryslidemenu" %>
+		<%= stylesheet_link_tag "jquery-ui" %>
+		<%= stylesheet_link_tag "demo_table" %>
+		<%= javascript_include_tag "jquery"%>
+		<%= javascript_include_tag "jqueryslidemenu"%>
+		<%= javascript_include_tag "jquery.dataTables"%>
+		<%= javascript_include_tag "application", :media => "all" %>
+		<%= csrf_meta_tags %>
+		
+		<style>
+			html {
+			    background: none repeat scroll 0 0 white;
+			}
+			.back{
+				width: 240px;
+				height: 200px;
+				margin-left:auto;
+				margin-right:auto;
+				margin-top: 200px;
+				-moz-border-radius: 15px;
+				border-radius: 15px;
+				border: 2px solid gray;
+				background-image: url("/assets/courier.jpg");
+			}
+			
+			.back .field label{
+				display: inline;
+			}
+			.back .field input[type='submit']{
+				margin-left: 150px;
+			}
+			
+			.back .field input{
+				display: inline;
+			}
+			
+			.back .content{
+				margin: 10px 15px 10px 15px;
+			}
+		</style>
+		
+	</head>
+	<body>
+					<%= yield %>
+			
+		
+	</body>
+</html>

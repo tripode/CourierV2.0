@@ -1,0 +1,397 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Producto
+		</legend>
+		<%= form_for($product, remote:true) do |f| %>
+		<ul>
+			<li>
+			    <label for="retire_note">*Nota Retiro N°:</label>
+			    <input id="retire_note" type="text"  value="" size="5" maxlength="7" />
+			</li>
+			<li>
+			    <label>Cliente:</label>
+			    <input id="customer_id" type="text" style="width: 50%" />
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Cant Productos:</label>
+				<input id='total_id' type="text" size="5" />
+			</li>
+			<li>
+				<label>Fecha:</label>
+				<%= f.text_field :created_at, {value: $product.format_admission_date, class:'i_fecha', size: 15, maxlength: 12, disabled: true} %>
+			</li>
+		</ul>
+	</fieldset>
+	<fieldset>
+		<div class="subtitle">
+            <h4>Registrar Producto</h4>
+          </div>
+		<ul>
+			<div class="hide"><%= f.hidden_field :retire_note_id, id: 'retire_note_id_hidden' %></div> 
+			<li>
+				<label>Item:</label>
+				<input id='item_id' type="text" size="5" />
+			</li> 
+			<li>
+				<label>Tipo de Producto:</label>
+				<input id='product_type' type="text" size="20"/>
+				<%= f.hidden_field :product_type_id, id: 'product_type_id_hidden' %>
+			</li>
+			
+			<li>
+				<label>*Remitente:</label>
+				<%= f.text_field :remitter, id:'remitter_id', value: "" ,style: 'width: 50%',:maxlength => 50 %>
+			</li>
+			<li>
+				<label for="receiver">* Destinatario:</label>
+				<input id="receiver" type="text" size="27" class="i_autocomplit" />
+				<%= link_to image_tag('add.png') , new_receiver_path, :id => "add_receiver", %>
+				<%= f.hidden_field :receiver_id, id: 'receiver_id_hidden' %>
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Direccion:</label>
+				<%= f.collection_select :receiver_address_id, $addresses, :id, :address, prompt: 'Seleccionar', id:'product_receiver_address_id' %>
+			</li>
+			<li>
+				<label>Ciudad:</label>
+				<input id="city_id" type="text" size="20" />
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Descripcion:</label>
+				<%=f.text_field :description, size:'30',id: 'description_id',:maxlength => 100  %>
+			</li>
+			
+			<li>
+				<label>*Codigo de Barra:</label>
+				<%= f.text_field :bar_code, id: 'bar_code',size: '20', :maxlength => 25%>
+			</li>
+			
+			<div class="clear"></div>
+		</ul>
+	</fieldset>
+	<div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'button_save_id'%>
+			<%= link_to 'Limpiar',new_product_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	
+	<% end %>
+</div>
+
+
+<script>
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+     //Submit cuando se presiona enter en el campo bar_code
+     $("#bar_code").keypress(function(e) {
+        if(e.which == 13) {
+            jQuery(this).blur();
+            jQuery('#button_save_id').focus().click();
+        }
+      });
+        /* esta funcion se encarga de cerrar el popup y
+         * actualizar el autocomplete para destinatarios
+         */
+        function cerrarYActualizar(){
+          $("#popup").dialog("close");
+          $("#popup").html("<%= escape_javascript (render 'popup_receiver')%>");
+          $.post("<%= update_new_receiver_products_path %>",{"receiver_id": null},
+					function(receivers){
+						var list=[];
+						$(receivers).each(function(index,element){
+							list[index]={
+					 			label: element.receiver_name,
+					 			id: element.id}
+						});
+						//Actualizo la nueva lista
+						$( "#receiver" ).autocomplete({ source: list });
+				},"json");
+        }
+	// pop in para agregar destinatarios
+	$(document).ready(function(){
+                /* este es el evento onclick para el boton mas de agregar destinatarios */
+		$("#add_receiver").click(function(event){
+                    event.preventDefault();
+                    ready=true;
+                    $("#popup").dialog({modal: true, overlay: {opacity: 0.9, background: "black" }, 
+                        title: "Nuevo Destinatario", width: 600, height: 590
+                    });
+		});
+                
+                //Funcion que guarda el receiver nuevo
+                $('#save-receiver-link').click(function(event){
+                  event.preventDefault();
+                  var receiver_name = "receiver_name="+$("#receiver_full_name").val()+"&";
+                  var document = "document="+$("#receiver_document_number").val()+"&";
+                  var data = receiver_name+document;
+                  $("input.addresses").each(function(){
+                    data+=$(this).attr('name')+"="+$(this).val()+"&";
+                  });
+                  //Este metodo llama a la funcion para guardar el receiver
+                  $.post("<%= save_receiver_products_path %>",
+                                          data,
+                                          function(response){
+                                                  //Si tuvo exito se actualiza
+                                                  cerrarYActualizar();
+                                          },"json");
+
+
+
+                });
+                
+	});
+	
+	//focus en el formulario
+    $("form:not(.filter) :input:visible:enabled:first").focus();
+	
+	//Aqui se hacer disable todo los imputs que se setean automaticamente
+	$("#customer_id").attr({disabled: true});
+	$("#total_id").attr({disabled: true});
+	$("#item_id").attr({disabled: true});
+	$("#product_type").attr({disabled: true});
+	$("#city_id").attr({disabled: true});
+	$("#address_id").attr({disabled: true});
+	//$("#button_save_id").attr({disabled: true});
+	
+	
+	//Autocomplite de notas de retiro
+	$(function() {
+
+		var list =[];
+		var i=0;
+		var item=1;
+		
+		<% $retire_notes.each do |r| %>
+		 	list[i]={
+		 		label: "<%= r.number %>",id: "<%= r.id %>", product_type_id:"<%=r.product_type_id %>", 
+		 		amount:<%=r.amount %>,amount_processed:<%=r.amount_processed%> ,customer_id:"<%=r.customer_id %>" };
+			i=i+1;
+		<% end %>
+		//autocomplete de nota de retiro
+		$("#retire_note").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#retire_note_id_hidden").val(ui.item.id);
+				$("#product_type_id_hidden").val(ui.item.product_type_id);
+				$("#total_id").val(ui.item.amount);
+				
+				var product_type_id=ui.item.product_type_id;
+				var customer_id=ui.item.customer_id;
+				$.amount=ui.item.amount;
+				$.retire_note_id=ui.item.id;
+				//alert(retire_note_id);
+				
+				//Metodo ajax que envia el id del tipo de producto al metodo getProducType
+				//dentro del controller y como resultado obtiene un objeto product_type
+				$.post("<%= getProductType_products_path %>",
+				{"id": product_type_id},
+				function(product_type){
+					$("#product_type").val(product_type.description);
+				},"json");
+				//Metodo ajax que envia el id del customer al metodo getCustomer
+				//dentro del controller y como resultado obtiene un objeto customer
+				$.post("<%= getCustomer_products_path %>",
+				{"id": customer_id},
+				function(customer){
+					$("#remitter_id").val(customer.name + " "+ customer.last_name + " " + customer.company_name);
+					$("#customer_id").val(customer.name + " "+ customer.last_name + " " + customer.company_name);
+				},"json");
+				
+				
+				//Metodo ajax para obtejer el nro de item del servidor
+			    $.post("<%= getItem_products_path %>",{"amount": $.amount, "id": $.retire_note_id},
+				function(objectItem){
+				$("#item_id").val(objectItem.item);
+				},"json");	
+				
+				//Metodo ajax para listar los productos de la nota de retiro
+			    $.post("<%= getListProducts_products_path %>",{"id": $.retire_note_id},"json");
+			   	
+				//coloco el foco para que ingrese el destinatario
+				$('#receiver').focus();
+			}
+		});
+		if($("#retire_note_id_hidden").val()!= "") {
+			//Cuando el id de la nota de retiro no es vacio se setea el numero de la nota en el campo
+						
+			var id=$("#retire_note_id_hidden").val();
+			var name= ""
+			var product_type_id=-1;
+			var customer_id=-1;
+			$.amount=-1
+			// busca el empleado dentro de la lista
+			$(list).each(function(index,element){
+				if(element.id == id){
+					name=element.label;
+					product_type_id=element.product_type_id;
+					customer_id=element.customer_id;
+					amount=element.amount
+					return true
+				}
+			});
+			//setea el nombre del empleado en el campo employee
+			$("#retire_note").val(name);
+			
+			//---------------------------
+			
+			//se setean las variables
+			$("#retire_note_id_hidden").val(id);
+			$("#product_type_id_hidden").val(product_type_id);
+			$("#total_id").val(amount);
+				
+				
+				
+			//ajax product
+			$.post("<%= getProductType_products_path %>",
+			{"id": product_type_id},
+			function(product_type){
+				$("#product_type").val(product_type.description);
+			},"json");
+			//ajax para cliente
+			$.post("<%= getCustomer_products_path %>",
+			{"id": customer_id},
+			function(customer){
+				$("#remitter_id").val(customer.name + " "+ customer.last_name + " " + customer.company_name);
+				$("#customer_id").val(customer.name + " "+ customer.last_name + " " + customer.company_name);
+			},"json");
+				
+			//coloco el foco para que ingrese el destinatario
+			$('#receiver').focus();
+			//---------------------------
+			
+			$.post("<%= getItem_products_path %>",{"amount": amount, "id": id},
+				function(objectItem){
+					$("#item_id").val(objectItem.item);
+			},"json");	
+		
+		}
+		
+		
+	});
+	//Autocomplite de destinatarios
+		
+	$(function() {
+		var list =[];
+		var i=0;
+		<% $receivers.each do |receiver| %>
+		 	list[i]={
+		 		label: "<%= receiver.receiver_name %>",
+		 		id: <%= receiver.id %>};
+			i=i+1;
+		<% end %>
+		//receiver autocomplete
+		$("#receiver").autocomplete({
+			minLength: 3,
+			source: list,
+			select: function(event, ui) { 
+				$("#receiver_id_hidden").val(ui.item.id);
+				//se obtiene elid del receiver
+				var receiver_id=ui.item.id;
+				var optionIndex=0;
+				var index=0;
+				//llamada ajax tipo Post al metodo getReceiverAddress para setear el id
+				//del receiver, como resultado devuelve la lista de direcciones del destinatario
+				$.post("<%= getReceiverAddress_products_path %>",
+				{"id": receiver_id},
+				function(addresses){
+					var index=0;
+					$("#product_receiver_address_id option").each(function(){
+						$(this).remove();
+					});
+					$(addresses).each(function(index,value){
+                           if(index==0){
+                              $('#product_receiver_address_id').append("<option value='"+addresses[index].id+"' selected='selected'>"+addresses[index].label +":"+ addresses[index].address+"</option>");
+                                                  
+                              $.post("<%= getCity_products_path %>",{"address_id": addresses[index].id},
+                              function(city){
+                                  $("#city_id").val(city.name);
+                                  $("#bar_code").focus();
+                              },"json");
+                           }
+                           else{
+                              $('#product_receiver_address_id').append("<option value='"+addresses[index].id+"'>"+addresses[index].label +":"+ addresses[index].address+"</option>");
+                           }
+					});
+
+					$('#address_id').focus();
+				},"json");	
+			}
+		});
+		if($("#receiver_id_hidden").val()!= "") {
+			//Cuando el id de receiver no es vacio se setea el nombre del receiver en el campo
+						
+			var id=$("#receiver_id_hidden").val();
+			var name= ""
+			// busca el empleado dentro de la lista
+			$(list).each(function(index,element){
+				if(element.id == id){
+					name=element.label
+					return true
+				}
+			})
+			//setea el nombre del destinatario en el campo receiver
+			$("#receiver").val(name);
+		
+		}
+	});
+
+	//Cuando cambia la direccion se actualiza el label city
+	$("#product_receiver_address_id").change(function(){
+		$.post("<%= getCity_products_path %>",{"address_id": $(this).val()},
+		function(city){
+			$("#city_id").val(city.name);
+			$("#bar_code").focus();
+		},"json");
+	});
+	
+	
+	$(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#bar_code").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+		
+		$("#retire_note").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+	
+	$("#product_receiver_address_id").attr({style: 'width: 150px'});
+	//Validaciones
+	//Validacion del nro de la nota de retiro
+        
+	 var f1 = new LiveValidation('retire_note', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Numericality, { notANumberMessage: " " } );
+        f1.add( Validate.Presence, { failureMessage: " " } );
+    //Validacion del codigo de barra
+     var f2 = new LiveValidation('bar_code', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f2.add( Validate.Numericality, { notANumberMessage: " " } );
+        f2.add( Validate.Presence, { failureMessage: " " } );
+     //Validacion del receiver
+     var f3 = new LiveValidation('receiver', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        
+     //Validacion del remitente
+	 var f4 = new LiveValidation('remitter_id', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+        
+     //Validacion de las direcciones
+     var f5 = new LiveValidation('product_receiver_address_id', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f5.add( Validate.Presence, { failureMessage: " " } );
+</script>

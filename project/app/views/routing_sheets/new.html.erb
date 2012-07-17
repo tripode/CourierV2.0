@@ -1,0 +1,41 @@
+
+<div  id="form_routing_sheet">
+	<%= render 'form' %>
+</div>
+ <div id="routing_sheet_product">
+	<%= render 'product' %>
+</div>
+
+<script type="text/javascript">
+  /* Este script es el responsable por 
+   * habilitar y desabilitar el boton 
+   * guardar de la hoja de ruta
+   */
+  function enableButton(button,enable){
+    if(enable){
+      $(button).removeClass('disabled').attr('disabled',false);
+    }else{
+      $(button).addClass('disabled').attr('disabled',true);
+    }
+  }
+  
+  function verify(){
+    var zone = ($("#routing_sheet_area_id").val()!="");
+    var details = ($("#tbody-details").children(":first-child").children().length > 1);
+    enableButton("#button_save_id",(zone && details));
+  }
+  
+  $(document).ready(function(){
+    $("input,a").click(function(){
+      verify();
+    });
+    $("input:text").keyup(function(){
+      verify();
+    });
+    setInterval("verify()", 100);
+  });
+</script>
+
+
+
+

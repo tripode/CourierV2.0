@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  routing_sheet_id: 1
+  description: MyString
+  who_received: MyString
+  received: MyString
+  package_id: 1
+  reason_id: 1
+
+two:
+  routing_sheet_id: 1
+  description: MyString
+  who_received: MyString
+  received: MyString
+  package_id: 1
+  reason_id: 1

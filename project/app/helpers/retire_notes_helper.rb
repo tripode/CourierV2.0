@@ -1,0 +1,2 @@
+module RetireNotesHelper
+end

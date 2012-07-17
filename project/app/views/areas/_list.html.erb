@@ -1,0 +1,28 @@
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+		<tr>
+			<th>Nombre</th>
+			<th>Ciudad</th>
+			<th>Descripcion</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @areas.each do |area| %>
+		<tr>
+			<td><%= area.area_name %></td>
+			<td><%= area.city.name %></td>
+			<td><%= area.description %></td>
+			<td>
+				<div>
+					<%= link_to image_tag('borrar2.gif'), area, confirm: 'Deseas eliminar  la zona?', method: :delete %>
+				</div>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

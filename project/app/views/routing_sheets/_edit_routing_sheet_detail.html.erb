@@ -1,0 +1,111 @@
+<div class="span-24 last">
+	
+<!--En esta tabla se van cargando los datos de quien recibio el producto, tambien 
+	en caso de no recibirse se carga el motivo por el cual no se entrego el producto-->
+<%= form_tag({:action => 'save_edited_details'}) do  %>
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+	  <tr>
+	  	<th>Item</th>
+	  	<th>Codigo</th>
+	    <th>Producto</th>
+	    <th>Destinatario</th>
+	    <th>Direccion</th>
+	    <th>Recibido por</th>
+	 	<th>No Entrega</th>
+	 	<th>¿Rutear.?</th>
+	  </tr>
+	</thead>
+	
+        <tbody id="details">
+	<% $routing_sheets_details.each do |detail| %>
+	  <tr>
+	  	<td style="width: 15px"><%= $routing_sheets_details.index(detail) + 1 %></td>
+	  	<td style="width: 35px"><%= detail.product.bar_code%></td>
+	  	<td style="width: 120px"><%= detail.product.product_type.description %></td>
+	  	<td style="width: 200px"><%= detail.product.receiver.receiver_name %></td>
+	  	<td style="width: 300px"><%= detail.product.receiver_address.address %></td>
+	  	<td><%= text_field_tag 'who_received_' + ($routing_sheets_details.index(detail) + 1).to_s,nil, size: 30, maxlength: 30%> </td>
+		<td><%= select_tag 'reason_id_'+ ($routing_sheets_details.index(detail) + 1).to_s, options_from_collection_for_select(Reason.all,"id","description"), prompt: "--Motivo--", style: "width: 150px" %></td>
+		<td><%= select_tag 'to_route_'+ ($routing_sheets_details.index(detail) + 1).to_s, options_for_select(["no","si"])%></td>
+	  </tr>
+	<% end %>
+	</tbody>
+</table>
+<div class="span-24 center last" >
+		<%= submit_tag 'Guardar', class: 'disabled', disabled: true%>	
+		<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+</div>
+<%end%>
+
+</div>
+
+<script type="text/javascript">
+  /*Este script habilita el boton guardar cuando haya completado todo el informe*/
+  function verify(){
+    if($("tbody#details").children().children().length > 1){
+      var enable = true;
+      $("tbody#details").children().each(function(){
+        var delivered = ($(this).children(":nth-child(6)").children(':first').val().length > 0);
+        var not_delivered = ($(this).children(":nth-child(7)").children(':first').val()!="");
+        if(!delivered && !not_delivered){
+          enable=false;
+        }
+      });
+      if(enable){
+        $("input[value='Guardar']").removeClass('disabled').attr('disabled',false);
+      }else{
+        $("input[value='Guardar']").addClass('disabled').attr('disabled',true);
+      }
+    }
+  }
+  
+  /* Este script valida el reporte de informes */
+  $(document).ready(function(){
+    $("input[name^='who_received_']").each(function(){
+      $(this).keyup(function(){
+        var value = $(this).val();
+        if($.trim(value).length > 0){
+          $(this).parent().parent().children(":nth-child(7)").children(":first").attr('disabled',true);
+          $(this).parent().parent().children(":nth-child(8)").children(":first").attr('disabled',true);
+        }else{
+          $(this).parent().parent().children(":nth-child(7)").children(":first").attr('disabled',false);
+          $(this).parent().parent().children(":nth-child(8)").children(":first").attr('disabled',false);
+        }
+      });
+    });
+    /* Este script valida el reporte de informes */
+    $("select[name^='reason_id_']").each(function(){
+      $(this).click(function(){
+        var value = $(this).val();
+        if($.trim(value).length > 0){
+          $(this).parent().parent().children(":nth-child(6)").children(":first").attr('disabled',true);
+          if($(this).val()=='14' || $(this).val()=='15'){
+            $(this).parent().parent().children(":nth-child(8)").children(":first").attr('disabled',true);
+          }else{
+            $(this).parent().parent().children(":nth-child(8)").children(":first").attr('disabled',false);
+          }
+        }else{
+          $(this).parent().parent().children(":nth-child(6)").children(":first").attr('disabled',false);
+          $(this).parent().parent().children(":nth-child(8)").children(":first").attr('disabled',false);
+        }
+      });
+    });
+    
+    /*verifica si habilitar el boton guardar o no*/
+    $("input").keyup(function(){
+      verify();
+    }).click(function(){
+      verify();
+    });
+    $("select").click(function(){
+      verify();
+    });
+    setInterval("verify()", 1000);
+  });
+  
+</script>

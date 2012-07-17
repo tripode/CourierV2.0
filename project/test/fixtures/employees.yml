@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+leo:
+  email: leoislinka@gmail.com
+  name: Leois
+  last_name: Linka
+  num_identity: 6717159
+  address: Encarnacion, calle Constitucion Nacional
+  admission_date: 2012-03-10
+  birthday: 2012-03-10
+  salary: 9.99
+  mobile_number: 0983672469
+  phone_number: no
+  function_type_id: 1
+
+wil:
+  email: wildomonges@gmail.com
+  name: Wildo
+  last_name: Monges
+  num_identity: 456789
+  address: Barrio Keneddy
+  admission_date: 2012-03-10
+  birthday: 2012-03-10
+  salary: 9.99
+  mobile_number: 09656784
+  phone_number: no
+  function_type_id: 1

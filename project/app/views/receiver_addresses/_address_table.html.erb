@@ -1,0 +1,22 @@
+<table id="address_table">
+	<thead>
+	  <tr>
+	    <th>Lugar</th>
+	    <th>Ciudad</th>
+	    <th>Dirección</th>
+	    <th><div style="width: 25px"></div></th>
+	  </tr>
+	</thead>
+	<tbody id="tbDetail">
+		<% if @receiver_addresses %>
+			<% @receiver_addresses.each do |receiver_address|%>
+			  <tr>
+			    <td><%= receiver_address.label %></td>
+			    <td><%= receiver_address.city.name if receiver_address.city %></td>
+			    <td><%= receiver_address.address %></td>
+			    <td><%= link_to 'x', '#'%></td>
+			  </tr>
+			<% end %>
+		<% end %>
+	</tbody>
+</table> 

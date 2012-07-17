@@ -1,0 +1,38 @@
+<h1>Listado Manifiestos de Carga</h1>
+
+<table class="tablaIndex display">
+  <thead>
+    <tr>
+      <th>Numero de Manifiesto</th>
+      <th>Fecha de Creacion</th>
+      <th>Ciudad de Origen</th>
+      <th>Ciudad de Destino</th>
+      <th>Guias Totales</th>
+      <th>Productos Totales</th>
+      <th>Peso total</th>
+      <th class="no-sorting"></th>
+      <th class="no-sorting"></th>
+      <th class="no-sorting"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cargo_manifests.each do |cargo_manifest| %>
+      <tr>
+        <td><%= cargo_manifest.manifest_num %></td>
+        <td><%= cargo_manifest.created_at %></td>       
+        <td><%= City.find(cargo_manifest.origin_city_id).name %></td>
+        <td><%= City.find(cargo_manifest.destiny_city_id).name %></td>
+        <td><%= cargo_manifest.total_guides %></td>
+        <td><%= cargo_manifest.total_products %></td>
+        <td><%= cargo_manifest.total_weight %></td>
+        <td><%= link_to image_tag('page_white_acrobat.png'), generate_cargo_manifest_pdf_cargo_manifests_path(id: cargo_manifest.id, format: 'pdf'), method: :post %></td>
+        <td><%= link_to image_tag('editar.gif'), edit_cargo_manifest_path(cargo_manifest) %></td>
+        <td><%= link_to image_tag('borrar2.gif'), cargo_manifest, confirm: 'Estas Seguro?', method: :delete %></td>
+      </tr>
+    </tbody>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'Nuevo Manifiesto de Carga', new_cargo_manifest_path %>

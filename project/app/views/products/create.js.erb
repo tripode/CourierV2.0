@@ -1,0 +1,16 @@
+
+$("#popup").html("<%= escape_javascript (render 'popup_receiver')%>");
+$("#form_product").html("<%= escape_javascript (render 'product')%>");
+$("#form_list_product").html("<%= escape_javascript (render 'list')%>");
+$('table[class*=tablaIndex]').dataTable({
+          "bScrollCollapse" : true,
+          "sPaginationType" : "full_numbers",
+          "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+ });
+ $("#product_receiver_address_id option").each(function(){
+	$(this).remove();
+ });
+ $('#product_receiver_address_id').append("<option value>Seleccionar</option>");
+ $('#bar_code').val("");
+ $('#receiver').val("");
+ 

@@ -1,0 +1,148 @@
+<div class="span-24 last">
+  <fieldset>
+    <legend>Usuario</legend>
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <%= devise_error_messages! %>
+      <div class='span-11'>
+        <ul class="field-list">
+          <li>
+            
+            <%= label_tag :employee, "* Empleado" %>
+            <input id="employee" type="text" size="30" class="i_autocomplit"  />
+            <%= hidden_field_tag :employee_id,nil, id: 'h-employee' %>   
+            
+            <%#= collection_select(resource_name, :employee_id, Employee.all, :id, "#{:full_name_24_length}") %>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <%= f.label :username, '* Usuario' %>
+            <%= f.text_field :username, :id => 'i_username', :maxlength => '20', :size => '30' %>
+          </li>
+          <li>
+            <%= f.label :email, '* Email' %>
+            <%= f.text_field :email, :maxlength => '50', :size => '30' %>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <%= f.label :password, '* Contraseña'%>
+            <%= f.password_field :password %>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <%= f.label :password_confirmation, '* Confirmar Contraseña' %>
+            <%= f.password_field :password_confirmation %>
+          </li>
+          <div class="clear"></div>
+        </ul>
+      </div>
+      <div class='span-11'>
+        <%= f.label :roles, 'Roles'%>
+        <ul class="field-list">
+          <div>
+            <% Role.all.each do |role| %>
+              <li class="left">
+                <%= check_box_tag :role_ids, role.id, resource.roles.include?(role), :name => 'user[role_ids][]' %>
+                <%= label_tag :role_ids, role.name %>
+              </li>
+            <% end %>
+          </div>
+        </ul>
+      </div>
+    </fieldset>
+    <div class="span-24 center last" >
+      <%= f.submit "Guardar", disabled:true, class:'disabled' %>
+      <%= link_to 'Limpiar','#', class: 'limpiar button'%>
+        <%= link_to 'Cancelar','../main_page/index', class: 'button'%>
+        </div>
+      <% end %>
+    </div>
+    <script>
+      //this clear all inputs with type text or type number
+      $('.limpiar').click(function() {
+        $('input[type=text]').val("");
+        $('input[type=number]').val("");
+
+      });
+      //Onfocus para que el cursor este sobre el input email
+      $('#i_username').focus();
+
+      //autocomplete para ciudades
+	$(function(){
+		var list =[];
+		var i=0;
+		<% @employees.each do |c| %>
+		 	list[i]={
+		 		label: "<%= c.name %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#employee").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#h-employee").val(ui.item.id); 
+			}
+		});
+		if($("#h-employee").val()!= "") {
+			//Cuando el id del cliente no es vacio se setea el nombre del cliente en el campo
+			//Esto se usa cuando se edita la nota de retiro, al hacer click en edit setea el nombre del cliente 
+			$("#save_button").val("Actualizar");
+			$("#retire_note_state").show();
+			var id=$("#h-employee").val();
+			var name= ""
+			// busca el empleado dentro de la lista
+			$(list).each(function(index,element){
+				if(element.id == id){
+					name=element.label
+					return true
+				}
+			})
+			//setea el nombre del empleado en el campo employee
+			$("#employee").val(name);
+		}
+	});  
+          
+        //validaciones
+        var f1 = new LiveValidation('user_password', { validMessage: " ", wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f2 = new LiveValidation('user_password_confirmation', { validMessage: " ", wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        f2.add( Validate.Confirmation, { match: 'user_password', failureMessage: " " });
+        
+        var f3 = new LiveValidation('i_username', { validMessage: " ", wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        
+        var f4 = new LiveValidation('user_email', { validMessage: " ", wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+        f4.add( Validate.Email, { failureMessage: " " } );
+        
+        var f5 = new LiveValidation('employee', { validMessage: " ", wait: 500 });
+        f5.add( Validate.Presence, { failureMessage: " " } );
+        
+        function verifyFields(){
+          var valid_class = "LV_valid_field";
+          var employee = $("#employee").hasClass(valid_class);
+          var username = $("#i_username").hasClass(valid_class);
+          var email = $("#user_email").hasClass(valid_class);
+          var password = $("#user_password").hasClass(valid_class);
+          var confirmation = $("#user_password_confirmation").hasClass(valid_class);
+          var roles = ($("input[name='user[role_ids][]']:checked").length > 0);
+          enableOrDisableButton("input[value='Guardar']", (employee && username && email && password && confirmation && roles));
+        }
+      function enableOrDisableButton(button, enable){
+        if(enable){
+          $(button).removeClass("disabled").attr('disabled',false);
+        }else{
+          $(button).addClass("disabled").attr('disabled',true);
+        }
+      }
+      
+      setInterval('verifyFields()',1000);
+      $("input").click(function(){
+        verifyFields();
+      }).keyup(function(){
+        verifyFields();
+      });
+        
+    </script>

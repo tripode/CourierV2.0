@@ -1,0 +1,70 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Destination person:</b>
+  <%= @transport_guide.destination_person %>
+</p>
+
+<p>
+  <b>Destination address:</b>
+  <%= @transport_guide.destination_address %>
+</p>
+
+<p>
+  <b>Remitter person:</b>
+  <%= @transport_guide.remitter_person %>
+</p>
+
+<p>
+  <b>Remitter address:</b>
+  <%= @transport_guide.remitter_address %>
+</p>
+
+<p>
+  <b>Customer:</b>
+  <%= @transport_guide.customer_id %>
+</p>
+
+<p>
+  <b>Foreign company:</b>
+  <%= @transport_guide.receiver_company_id %>
+</p>
+
+<p>
+  <b>Employee:</b>
+  <%= @transport_guide.employee_id %>
+</p>
+
+<p>
+  <b>Service type:</b>
+  <%= @transport_guide.service_type_id %>
+</p>
+
+<p>
+  <b>Transport guide state:</b>
+  <%= @transport_guide.transport_guide_state_id %>
+</p>
+
+<p>
+  <b>Num guide:</b>
+  <%= @transport_guide.num_guide %>
+</p>
+
+<p>
+  <b>Payment method:</b>
+  <%= @transport_guide.payment_method_id %>
+</p>
+
+<p>
+  <b>Destination city:</b>
+  <%= @transport_guide.destination_city_id %>
+</p>
+
+<p>
+  <b>Origin city:</b>
+  <%= @transport_guide.origin_city_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_transport_guide_path(@transport_guide) %> |
+<%= link_to 'Back', transport_guides_path %>

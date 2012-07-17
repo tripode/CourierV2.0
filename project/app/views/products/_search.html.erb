@@ -1,0 +1,155 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Buscar Productos
+		</legend>
+		<%= form_tag({:action => 'search'}, :remote => true) do  %>
+		<ul>
+			<li>
+				<label>Inicio:</label>
+				<%= text_field_tag :inited_at,$product.format_admission_date, class:'i_fecha', size: 15, maxlength: 12, id: 'inited_at' %>
+			</li>
+			<li>
+				<label>Fin:</label>
+				<%= text_field_tag :finished_at,$product.format_admission_date, class:'i_fecha', size: 15, maxlength: 12, id:'finished_at' %>
+			</li>
+		</ul>
+	</fieldset>
+	<fieldset>
+		<div class="subtitle">
+            <h4>Ingresar datos para la busqueda</h4>
+          </div>
+		
+		<ul>
+			<li>
+			    <label for="retire_note">Nota Retiro N°:</label>
+			    <%= text_field_tag :retire_note_number,nil, id:'retire_note_number', style: 'width: 20%', :maxlength => 10 %>
+			  
+			</li>
+			<li>
+			    <label>Cliente:</label>
+			    <input id="customer"  type="text" style="width: 60%" class="i_autocomplit"  />
+			    <%= hidden_field_tag :customer_id,nil,id: 'customer_id_hidden' %>    
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Tipo de Producto:</label>
+				<%= select_tag :product_type_id, options_from_collection_for_select(ProductType.all,"id","description"), prompt: "-- Todos--"%>
+			</li>
+			<li>
+				<label for="receiver"> Destinatario:</label>
+			    <input id="receiver" type="text" size="27" class="i_autocomplit" />
+				<%= hidden_field_tag :receiver_id,nil, id: 'receiver_id_hidden' %>
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Codigo de Barra:</label>
+				<%= text_field_tag :bar_code,nil, id: 'bar_code',size: '20', :maxlength => 25%>
+			</li>
+			
+			<li>
+				<label>Estado:</label>
+				<%= select_tag :product_state_id, options_from_collection_for_select(ProductState.all,"id","state_name"), prompt: "-- Todos--", id:'product_state_id' %>
+			</li>
+			
+		</ul>
+		
+	
+	</fieldset>
+	<div class="span-24 center last" >
+		
+			<%= submit_tag 'Buscar', id: 'button_search_id'%>
+			<%= link_to 'Limpiar',products_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	
+	<% end %>
+</div>
+<script>
+	//focus en el formulario
+    $("#retire_note_number").focus();
+	
+	
+	 //Autocomplite de clientes
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @customers.each do |c| %>
+		 	list[i]={
+		 		label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		$("#customer").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#customer_id_hidden").val(ui.item.id); 
+			}
+		});
+	});
+	
+	//Autocomplite de destinatarios
+	$(function() {
+		var list =[];
+		var i=0;
+		<% $receivers.each do |receiver| %>
+		 	list[i]={
+		 		label: "<%= receiver.receiver_name %>",
+		 		id: <%= receiver.id %>};
+			i=i+1;
+		<% end %>
+		//receiver autocomplete
+		$("#receiver").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#receiver_id_hidden").val(ui.item.id);
+			}
+		});
+	});
+	
+	
+	$(document).ready(function(){
+     	//Comprueba que se teclee solo numeros
+		$("#bar_code").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+		
+		$("#retire_note_number").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+	
+	//Validaciones
+	//Validacion del nro de la nota de retiro
+	 var f1 = new LiveValidation('retire_note_number', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Numericality, { notANumberMessage: "Debe ser un numero" } );
+
+    //Validacion del codigo de barra
+     var f2 = new LiveValidation('bar_code', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f2.add( Validate.Numericality, { notANumberMessage: " " } );
+      
+     //Validacion del receiver
+     var f3 = new LiveValidation('receiver', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+       
+        
+     //Validacion del remitente
+	 var f4 = new LiveValidation('customer', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+     
+     //Validaciones fechas
+     var f5 = new LiveValidation('inited_at', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+     f5.add( Validate.Presence, { failureMessage: " " } );
+     var f6 = new LiveValidation('finished_at', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+     f6.add( Validate.Presence, { failureMessage: " " } );   
+     
+
+</script>

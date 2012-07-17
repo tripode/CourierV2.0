@@ -1,0 +1,58 @@
+
+<div class="span-10 last" style="">
+  <table id="product_table">
+    <thead>
+      <tr>
+        <th>Tipo de Producto</th>
+        <th>Cantidad</th>
+        <th>Peso</th>
+        <th>Costo Unitario</th>
+        <th><div style="width: 25px"></div></th>
+      </tr>
+
+    </thead>
+    <tbody id="tbDetail">
+      <%@cont=0 %>
+      <%@transport_guide_details.each do |detail|  %>
+        <tr>
+          <td><%=detail.product_type.description%></td>
+          <input type="hidden" name="details[<%=@cont%>][product_type_id]" value="<%=detail.product_type_id%>"></input>
+          <td><%=detail.amount %></td>
+          <input type="hidden" name="details[<%=@cont%>][amount]" value="<%=detail.amount%>"></input>
+          <td><%=detail.weight%></td>
+          <input type="hidden" name="details[<%=@cont%>][weight]" value="<%=detail.weight%>"></input>
+          <td><%=detail.unit_cost%></td>
+          <input type="hidden" name="details[<%=@cont%>][unit_cost]" value="<%=detail.unit_cost%>"></input>
+          <td><%= link_to '', delete_detail_product_transport_guides_path(transport_guide_id: detail.transport_guide_id, destroy: @cont, details: @transport_guide_details.to_a ), method: 'post' , remote: 'true', onclick: 'eliminarFila()', class: 'delete', id: 'delete_product'%></td>
+          <%@cont+=1%>
+          
+      </tr>
+    <%end%>
+    <input type="hidden" id="cant_productos" value="0"></input>
+    </tbody>
+
+  </table>
+</div>
+<script type="text/javascript">
+ $("#delete_product").click(function(){
+      var href_temp= $(this).attr("href");
+      var cant_product=$('#cant_productos').val();
+      var href;
+      //limpia el href
+      href_temp= $(this).attr("href");
+      var index = href_temp.indexOf("&cant_productos");
+      if(index>0){
+          href=href_temp.substring(0, index);
+      }else {
+        href= href_temp;
+      }
+      
+      $(this).attr("href",href +"&cant_productos="+cant_product);
+      cant_product++;
+      $('#cant_productos').val(cant_product);
+
+      
+
+    });
+</script>
+

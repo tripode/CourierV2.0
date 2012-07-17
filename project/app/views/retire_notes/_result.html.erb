@@ -1,0 +1,42 @@
+<div class="span-24 last">
+	
+<table 
+	columnClasses="center,center,center,center,center,center,center,center,center,center" 
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0" 
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+		<tr>
+			<th>Nro</th>
+			<th>Cliente</th>
+			<th>Producto</th>
+			<th>Cantidad</th>
+			<th>Registrado</th>
+			<th>Ciudad</th>
+			<th>Estado</th>
+			<th>Fecha Registro</th>
+			<th>Fecha Vencimiento</th>
+			<th></th>
+			
+		</tr>
+	</thead>
+	<tbody>
+		<% @retire_notes.each do |note| %>
+		<tr>
+			<td><%= note.number %></td>
+			<td><%= if !note.customer_id.nil? then note.customer.company_name + " " + note.customer.last_name + " " + note.customer.name end %></td>
+			<td><%= if !note.product_type.id.nil? then note.product_type.description end %></td>	
+			<td><%= note.amount %></td>
+			<td><%= note.amount_processed %></td>
+			<td><%= if !note.city_id.nil? then note.city.name + "-" + note.city.province.name end %></td>
+			<td><%= if !note.retire_note_state_id.nil? then note.retire_note_state.state_name end %> </td>
+			<td><%= note.date.strftime("%d-%m-%Y") %></td>
+			<td><%= note.expiration_date.strftime("%d-%m-%Y") %></td>
+			<td><div><%= link_to 'Mostrar',  note, id: 'mostrar' %></div></td>
+		<% end%>
+		</tr>
+	</tbody>
+</table>
+<br />
+<br />
+</div>

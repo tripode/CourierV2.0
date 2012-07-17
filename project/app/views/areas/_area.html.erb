@@ -1,0 +1,84 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Registrar Nueva Zona
+		</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="50" value="<%= notice %>" style="background:none; border:none; color: green" />
+		</div>
+		<%= form_for(@area) do |f| %>
+		  <% if @area.errors.any? %>
+		    <div id="error_explanation">
+		      <h2><%= pluralize(@area.errors.count, "error") %> prohibited this customer from being saved:</h2>
+		
+		      <ul>
+		      <% @area.errors.full_messages.each do |msg| %>
+		        <li><%= msg %></li>
+		      <% end %>
+		      </ul>
+		    </div>
+		  <% end %>
+		<ul>
+			<li>
+				<label>* Nombre:</label>
+		    	<%= f.text_field :area_name, id: 'i_name', :maxlength => 30 %>	
+			</li>
+			<li>
+				<label>* Ciudad:</label>
+				<input id="city" type="text" size="20"  />
+				<%= f.hidden_field :city_id, id: 'city_id' %>
+			</li>
+			<div class="clear"></div>
+			
+			<li>
+				<label>Descripcion:</label>
+		    	<%= f.text_field :description, id: 'i_description', :maxlength => 30 %>	
+			</li>
+			<div class="clear"></div>
+			
+		</ul>
+	
+	</fieldset>
+	<div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'save_button' %>
+			<%= link_to 'Limpiar','#', class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+///focus en el formulario
+          $("form:not(.filter) :input:visible:enabled:first").focus();
+	//Autocomplete de ciudades
+	$(function(){
+		var list =[];
+		var i=0;
+		<% @cities.each do |c| %>
+		 	list[i]={
+		 		label: "<%= c.name %>",id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		
+		//autocomplete de nota de retiro
+		$("#city").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#city_id").val(ui.item.id);
+			}
+		});
+		
+		
+	});
+	
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+	//validaciones
+        var f1 = new LiveValidation('i_name', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+         var f2 = new LiveValidation('city', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+       
+	
+</script>

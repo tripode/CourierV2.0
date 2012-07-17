@@ -1,0 +1,55 @@
+<div class="span-24 left">
+	
+	<div class="subtitle">
+	      <h4>Descripcion completa del producto</h4>
+	</div>
+	<p id="notice"><%= notice %></p>
+	<p>
+	  <b>Codigo de Barra:</b>
+	  <%= @product.bar_code %>
+	</p>
+	
+	<p>
+	  <b>Tipo de Producto:</b>
+	  <%= @product.product_type.description %>
+	</p>
+	
+	<p>
+	  <b>Nota de Retiro:</b>
+	  <%= @product.retire_note.number %>
+	</p>
+	
+	<p>
+	  <b>Cliente:</b>
+	  <%= @product.retire_note.customer.company_name + ' ' +@product.retire_note.customer.last_name + ' ' + @product.retire_note.customer.name  %>
+	</p>
+	
+	<p>
+	  <b>Estado:</b>
+	  <%= @product.product_state.state_name %>
+	</p>
+	
+	<p>
+	  <b>Destinatario:</b>
+	  <%= @product.receiver.receiver_name %>
+	</p>
+	
+	<p>
+	  <b>Direccion:</b>
+	  <%= @product.receiver_address.address %>
+	</p>
+	
+	<p>
+	  <b>Fecha de Registro:</b>
+	  <%= @product.created_at.strftime("%d-%m-%Y") %>
+	</p>
+	
+	<p>
+	  <b>Recibido por el destinatario:</b>
+	  <%= if !@product.received_at.nil? then @product.received_at.strftime("%d-%m-%Y") end %>
+	</p>
+
+<%= link_to 'Regresar', products_path %>
+</div>
+
+

@@ -1,0 +1,47 @@
+<div class="span-24 left">
+	<div id="form_notice" width="100%"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+	</div>
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+	  <tr>
+	  	<th>Codigo</th>
+	    <th>Producto</th>
+	    <th>Cliente</th>
+	    <th>Destinatario</th>
+	    <th>Ciudad</th>
+	    <th>Lugar</th>
+	    <th>Direccion</th>
+	    <th></th>
+	  </tr>
+	</thead>
+	<tbody>
+	<% $products.each do |product| %>
+	  <tr>
+	  	<td><%= product.bar_code%></td>
+	  	<td><%= product.product_type.description %></td>
+	  	<td><%= product.retire_note.customer.company_name + " " +
+	  		 product.retire_note.customer.last_name + " " + 
+	  		 product.retire_note.customer.name %></td>
+	  	<td><%= product.receiver.receiver_name%></td>
+	  	<td><%= product.receiver_address.city.name %></td>
+	  	<td><%= product.receiver_address.label%></td>
+	  	<td><%= product.receiver_address.address%></td>
+	  	<td>
+			<div>
+				<%= if product.product_state_id.to_i == ProductState.no_enviado then link_to image_tag('borrar2.gif'), product, confirm: 'Deseas eliminar el producto?', method: :delete, remote:true, title: 'Eliminar' end %>
+			</div>
+		</td>
+	  </tr>
+	<% end %>
+	</tbody>
+</table>
+</div>
+<script>
+	
+</script>
+

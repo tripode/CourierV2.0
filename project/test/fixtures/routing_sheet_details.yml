@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  routing_sheet_id: 1
+  product_id: 1
+  who_received: MyString
+  comentary: MyString
+  reason_id: 1
+
+two:
+  id: 1
+  routing_sheet_id: 1
+  product_id: 1
+  who_received: MyString
+  comentary: MyString
+  reason_id: 1

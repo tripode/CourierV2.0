@@ -1,0 +1,34 @@
+<div class="back">
+	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+	<div class="content">
+            <br/>
+              <% if !flash.empty? %>
+		<div style="color: red; text-align: center;">
+                  <% flash.each do |name, msg| %>
+                    <%= content_tag :div, msg, :id => "flash_#{name}" if msg.is_a?(String) %>
+                  <% end %>
+                </div>
+              <% else %>
+                <br/>
+              <% end %>
+		<div class="field">
+	  		<%= f.text_field :login, :placeholder => 'email o usuario' %>
+	  	</div>
+		<div class="field">
+  			<%= f.password_field :password, :placeholder => 'contraseña' %>
+  		</div>
+  		<% if devise_mapping.rememberable? -%>
+    		<div class="field">
+    			<%= f.check_box :remember_me %> 
+    			<%= f.label :remember_me, 'Recordarme' %>
+    		</div>
+  		<% end -%>
+  		
+  		<div class="field">
+  			<%= f.submit "Login" %>
+  		</div>
+  		
+  		<% end %>
+		
+	</div>
+</div>

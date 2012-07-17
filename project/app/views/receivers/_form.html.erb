@@ -1,0 +1,208 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Destinatario
+		</legend>
+		
+		<div class="span-10">
+			<ul class="field-list">
+				<div>
+					<li>
+                                          <%= f.label :receiver_name, "* Nombre y Apellido", :class => 'large-label'%>
+                                          <%= f.text_field :receiver_name , :id => 'receiver-name', :maxlength => '50', :size => '30'%>
+					</li>
+					<li>
+                                          <%= f.label :document, "Nº de Documento", :class => 'large-label' %>
+                                          <%= f.text_field :document, :id => 'document', :maxlength => '20', :size => '30' %>
+					</li>					
+				</div>
+			</ul>
+                  
+ 			<div class="subtitle span-10 prepend-5 prepend-top">
+				<h4>Dirección</h4>
+			</div>		
+                  
+	    	<ul class="field-list">
+				<div>
+					<li>
+						<p>
+							
+						</p>
+						<%= label_tag :place, "* Lugar"%>
+						<%= text_field_tag :place, nil, :id => 'i-place', :maxlength => '15', :size => '30'%>
+						
+					</li>
+					<li>
+	
+						<%= label_tag :city, "* Ciudad"%>
+						<input id="city" type="text" size="30" class="i_autocomplit"  />
+						<%= hidden_field_tag :city_id,nil, id: 'h-city' %>   
+ 
+					</li>
+					<li>
+						<%= label_tag :address, "* Dirección" %>
+						<%= text_field_tag :address, nil, :id => 'i-address', :size => '30'%>
+					</li>
+			    </div>
+			</ul> 
+			<div class="prepend-7">
+                                <%= link_to_function "Agregar", "add()", class: ['button', 'disabled'], disabled: true, id: 'link-add' %>
+			</div> 
+		</div>
+		
+		<div id="address" class="prepend-1 span-10 last subtitle">
+			<h4>Direcciones</h4>
+			<table>
+				<thead>
+					<th>Lugar</th>
+					<th>Ciudad</th>
+					<th>Dirección</th>
+					<th></th>
+				</thead>
+				<tbody id="addresses">
+					<% @receiver.receiver_addresses.each do |address| %>
+							<tr>
+								<td>
+									<%= address.label %>
+								</td>
+								<td>
+									<%= address.city.name if address.city %>
+								</td>
+								<td>
+									<%= address.address %>
+								</td>
+								<td> </td>
+							</tr>
+					<% end %>
+					
+				</tbody>
+			</table>
+		</div>
+	</fieldset>
+	
+	
+</div>
+
+<script type="text/javascript">
+      var f1 = new LiveValidation('receiver-name', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+      f1.add( Validate.Presence, { failureMessage: " " } );
+      
+      $("#document").keypress(function (e){
+        //if the letter is not digit then display error and don't type anything
+        if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57)){
+          return false;
+        }
+      });
+      
+	//autocomplete para ciudades
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @cities.each do |c| %>
+		 	list[i]={
+		 		label: "<%= c.name %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#city").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#h-city").val(ui.item.id); 
+			}
+		});
+		if($("#h-city").val()!= "") {
+			alert('aqui');
+			//Cuando el id del cliente no es vacio se setea el nombre del cliente en el campo
+			//Esto se usa cuando se edita la nota de retiro, al hacer click en edit setea el nombre del cliente 
+			$("#save_button").val("Actualizar");
+			$("#retire_note_state").show();
+			var id=$("#h-city").val();
+			var name= ""
+			// busca el empleado dentro de la lista
+			$(list).each(function(index,element){
+				if(element.id == id){
+					name=element.label
+					return true
+				}
+			})
+			//setea el nombre del empleado en el campo employee
+			$("#city").val(name);
+		}
+	});
+      
+</script>
+<script>
+	/*
+	 * Este codigo es el responsable por agregar filas a la tabla de direcciones
+	 */
+	var counter = 0;
+	function add(){
+		place_obj = $('#i-place');
+		city_obj = $('#city');
+		city_id_obj = $('#h-city');
+		address_obj = $('#i-address');
+		
+		place = place_obj.attr('value');
+		city = city_obj.attr('value');
+		address = address_obj.attr('value');
+		city_id = city_id_obj.attr('value');
+		place_obj.attr('value','');
+		city_obj.attr('value','');
+		address_obj.attr('value','');
+		city_id_obj.attr('value','');
+		
+		var string = "<tr>"+
+		"<td>"+place+"<input type='hidden' name='receiver[receiver_addresses_attributes]["+counter+"][label]' value='"+place+"'></td>"+
+		"<td>"+city+"<input type='hidden' name='receiver[receiver_addresses_attributes]["+counter+"][city_id]' value='"+city_id+"'></td>"+
+		"<td>"+address+"<input type='hidden' name='receiver[receiver_addresses_attributes]["+counter+"][address]' value='"+address+"'></td>"+
+		"<td><a id='"+place+city+address+"' href='delete'><img src='/assets/borrar2.gif'></a></td>"+
+		"</tr>"
+		$('#addresses').append(string);
+		counter++;
+                
+                updateDeleteLinks();
+	}
+	/* esta funcion es la encargada de eliminar las 
+	 * filas de las tablas de las direcciones 
+	 * al hacer click en un boton
+	 */
+	function updateDeleteLinks(){
+		$('a[href=delete]').click(function(event){
+			event.preventDefault();
+			$(this).parent().parent().remove();
+		});
+	}
+        
+	/* validaciones */
+        var first_and_last_name = new LiveValidation('receiver-name', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        first_and_last_name.add( Validate.Presence, { failureMessage: " " } );
+        
+</script>
+<script type="text/javascript">
+  function verify(){
+      var name = ($("#receiver-name").val().length > 0);
+      var place = ($("#i-place").val().length > 0);
+      var city = ($("#h-city").val().length > 0);
+      var address = ($("#i-address").val().length > 0);
+      var addresses = ($("#addresses").children().length > 0);
+      if(place && city && address){
+        $("#link-add").removeClass('disabled').attr('disabled',false);
+      }else{
+        $("#link-add").addClass('disabled').attr('disabled',true);
+      }
+      if(name && addresses){
+        $("#save_new_receiver_button").removeClass('disabled').attr('disabled',false);
+      }else{
+        $("#save_new_receiver_button").addClass('disabled').attr('disabled',true);
+      }
+    }
+  $(document).ready(function(){
+    
+    setInterval("verify()",1000);
+    
+    $("input:text").keyup(function(){
+      verify();
+    });
+  });
+</script>

@@ -1,0 +1,92 @@
+<!-- Esta pagina sirve para generar los reportes que se envian al cliente 
+	Permite generar el archivo como pdf y tambien descagar el archivo como csv-->
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Informe de Entrega al Cliente
+		</legend>
+		<%= form_tag({:action => 'generate_delivery_report', format: 'pdf'}, id:'form') do  %>
+		<ul>
+			<li>
+			    <label>N° Nota Retiro:</label>
+			    <%= text_field_tag :retire_note_number, nil, size: 10, id: 'retire_note_number' %>
+			    <%= hidden_field_tag :retire_note_id,nil,id: 'note_id_hidden' %>    
+			</li>
+			<li>
+			    <label>Fecha:</label>
+			<%= text_field_tag :report_date,nil, class:'i_fecha', size: 15, maxlength: 12, id: 'report_date' %>
+			</li>
+			<div class="clear"></div>
+			<li>
+			    <label>Cliente:</label>
+			    <input id="customer"  type="text" style="width: 60%"  />
+			    <%= hidden_field_tag :customer_id,nil,id: 'customer_id_hidden' %>    
+			</li>
+		</ul>
+		
+	</fieldset>
+	<div class="span-24 center last" >
+		
+			<%= submit_tag 'Generar PDF',id: 'button_pdf_id'%>
+			<%= submit_tag 'Descargar Excel',id: 'button_csv_id'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	
+	<% end %>
+</div>
+<script>
+	//focus en el formulario
+   $("#retire_note_number").focus();
+	
+	 //Autocomplite de notas de retiro
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @retire_notes.each do |r| %>
+		 	list[i]={
+		 		label: "<%= r.number%>",id: <%= r.id %>,
+		 		customer_id: <%= r.customer_id %>};
+			i=i+1;
+		<% end %>
+		$("#retire_note_number").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$.post("<%= getCustomer_products_path %>",{"id": ui.item.customer_id},
+                function(customer){
+                        $("#customer").val(customer.last_name + " " + customer.name + " " + customer.company_name);
+                 },"json");
+				$("#customer_id_hidden").val(ui.item.customer_id); 
+				$("#note_id_hidden").val(ui.item.id);
+			}
+		});
+	});
+	
+	//Si se hace click sobre el boton csv se setea el form como .csv sino .pdf
+	$("#button_csv_id").click(function(){
+		$("#form").attr({action: "/products/generate_delivery_report.csv"});
+	});
+	
+	$("#button_pdf_id").click(function(){
+		$("#form").attr({action: "/products/generate_delivery_report.pdf"});
+	});
+	//Validaciones
+     $(document).ready(function(){
+     	
+		$("#retire_note_number").keypress(function (e)
+		{
+		  //if the letter is not digit then display error and don't type anything
+		  if( e.which!=8 && e.which!=0 && (e.which<48 || e.which>57))
+		  {
+		    return false;
+		  }
+		});
+	});
+     //Validaciones fechas
+     var f1 = new LiveValidation('report_date', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+     var f3 = new LiveValidation('customer', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+     var f4 = new LiveValidation('retire_note_number', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+
+</script>

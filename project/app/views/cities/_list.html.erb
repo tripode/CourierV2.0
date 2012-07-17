@@ -1,0 +1,28 @@
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+		<tr>
+			<th>Ciudad</th>
+			<th>Departamento</th>
+			<th>Pais</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @cities.each do |city| %>
+		<tr>
+			<td><%= city.name %></td>
+			<td><%= city.province.name %></td>
+			<td><%= city.province.country.name %></td>
+			<td>
+				<div>
+					<%= link_to image_tag('borrar2.gif'),city, confirm: 'Estas seguro?', method: :delete %>
+				</div>
+			</td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

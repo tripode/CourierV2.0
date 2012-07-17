@@ -1,0 +1,82 @@
+<fieldset>
+	<legend>
+		Informacion de la nota de retiro
+	</legend>
+	<div id="notice" class="subtitle">
+		<%= notice %>
+	</div>
+	<ul>
+	      <li>
+		    <label>N°:</label>
+		    <input type="text" value="<%= @retire_note.number %>" disabled="true" size="8" />
+		  </li>
+		  <li>
+		    <label>Fecha Registro:</label>
+		    <input type="text" value="<%= @retire_note.date.strftime("%d-%m-%Y") %>" size="10" />
+		  </li>
+		  <div class="clear"></div>
+		  <li>
+		    <label>Cliente:</label>
+		    <input type="text" disabled="true" size="34" value=" <%= if !@retire_note.customer_id.nil? then @retire_note.customer.last_name + ' ' + @retire_note.customer.name + ' ' + @retire_note.customer.company_name end %>"   /> 
+		  </li>
+		  <li>
+		    <label>Fecha Vence:</label>
+		    <input type="text" value="<%= @retire_note.expiration_date.strftime("%d-%m-%Y") %>" size="10" />
+		  </li>
+		  <div class="clear"></div>
+		  <li>
+		    <label for="employee">Funcionario:</label>
+		    <input id="employee" type="text" disabled="true" value="<%= @retire_note.employee.last_name + ' ' + @retire_note.employee.name%>" style="width: 60%" />
+		     
+		  </li>
+		   
+		  <li>
+		    <label>Servicio:</label>
+		   <input type="text" disabled="true" value="<%= if !@retire_note.service_type_id.nil? then @retire_note.service_type.description end %>" />
+		  </li>
+		  <br />
+		   <div class="clear"></div>
+	       <div class="subtitle">
+            	<h4>Detalles del Producto</h4>
+          	</div>
+          <div class="clear"></div>
+			<br />
+			<li>
+		    	<label>Tipo Producto:</label>
+		    	<input type="text" disabled="true" value=" <%= if !@retire_note.product_type_id.nil? then @retire_note.product_type.description end%>" />
+		  	</li>
+		  	<li>
+		  		<label>Ciudad:</label>
+		    	<input type="text" disabled="true" size="15" value="<%= if !@retire_note.city_id.nil? then @retire_note.city.name end%>" />
+		  	</li>
+		  	<div class="clear"></div>
+		  	<li>
+		  		<label>Cantidad:</label>
+		    	<input type="text" disabled="true" value="<%= @retire_note.amount %>"  size="8"/>
+		  	</li>
+		  	<li>
+		  		<label>Precio Unit: Gs.)</label>
+		    	<input type="text" disabled="true" value=" <%= @retire_note.unit_price %>" size="8" />
+		  	</li>
+		  	<div class="clear"></div>
+		  	<li>
+		  		<label>Descripcion:</label>
+		    	<input type="text" disabled="true" value="<%= @retire_note.description %>" size="30" />
+		  	</li>
+		  	<li id="retire_note_state">
+		  		<label>Estado:</label>
+		  		<input type="text" value="<%=@retire_note.retire_note_state.state_name%>" size="15" />
+		  	</li>
+		  	<div class="clear"></div> 
+		  	
+		</ul>
+	
+</fieldset>
+
+<div class="span-24 center last" >
+	<%= link_to 'Regresar', new_retire_note_path,class: 'button' %>
+	<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	
+</div>
+
+

@@ -1,0 +1,30 @@
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+	  <tr>
+	  	<th>Item</th>
+	  	<th>Codigo</th>
+	    <th>Producto</th>
+	    <th>Destinatario</th>
+	    <th>Direccion</th>
+	    <th>Recibido por</th>
+	    <th>Motivo no entrega</th>
+	  </tr>
+	</thead>
+	<tbody>
+	<% @details.each do |detail| %>
+	  <tr>
+	  	<td><%= @details.index(detail) + 1%></td>
+	  	<td><%= detail.product.bar_code%></td>
+	  	<td><%= detail.product.product_type.description %></td>
+	  	<td><%= if detail.product.receiver_id != nil then detail.product.receiver.receiver_name end%></td>
+	  	<td><%= if detail.product.receiver_address_id != nil then detail.product.receiver_address.address end%></td>
+	  	<td><%= if detail.received='s' then detail.who_received end %></td>
+	  	<td><%= if detail.reason_id!= nil then detail.reason.description end%></td>
+	  </tr>
+	<% end %>
+	</tbody>
+</table>

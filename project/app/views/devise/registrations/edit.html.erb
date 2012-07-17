@@ -1,0 +1,63 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Perfil
+		</legend>
+		<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+		<div class='span-11'>
+			<ul class="field-list">
+				<li>
+					<%= f.label :username, 'Usuario' %>
+			    	<%= f.text_field :username, id: 'i_username' %>	
+				</li>
+				<li>
+					<%= f.label :email %>
+			    	<%= f.email_field :email, id: 'i_email' %>	
+				</li>
+				<div class="clear"></div>
+			</ul>
+		</div>
+		<div class='span-11'>
+			<div>
+			<ul class="field-list">
+				<div>
+					<li>
+						<%= f.label :current_password, "Contraseña actual"%>
+				    	<%= f.password_field :current_password, id: 'i_password' %>	
+					</li>
+					<div class="clear"></div>
+				   <li>
+						<%= f.label :password, "Nueva contraseña"%>
+				    	<%= f.password_field :password, :autocomplete => "off", id: 'i_password_confirmation' %>	
+					</li>
+					<div class="clear"></div>
+					<li>
+						<%= f.label :password_confirmation, 'Nueva contraseña' %>
+				    	<%= f.password_field :password_confirmation %>	
+					</li>
+				</div>
+			</ul>
+			</div>
+		</div>
+	</fieldset>
+	<div class="span-24 center last" >
+				<%= f.submit "Guardar" %>
+				<%= link_to 'Cancelar','../main_page/index', class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+	//Onfocus para que el cursor este sobre el input email
+	$('#i_username').focus();
+	
+	//validaciones
+        var f1 = new LiveValidation('i_username', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+        var f2 = new LiveValidation('i_email', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        var f3 = new LiveValidation('i_password', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        var f4 = new LiveValidation('i_password_confirmation', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+</script>
+

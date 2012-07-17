@@ -1,0 +1,41 @@
+<%= form_for(@routing_sheet_detail) do |f| %>
+  <% if @routing_sheet_detail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@routing_sheet_detail.errors.count, "error") %> prohibited this routing_sheet_detail from being saved:</h2>
+
+      <ul>
+      <% @routing_sheet_detail.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :id %><br />
+    <%= f.number_field :id %>
+  </div>
+  <div class="field">
+    <%= f.label :routing_sheet_id %><br />
+    <%= f.number_field :routing_sheet_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_id %><br />
+    <%= f.number_field :product_id %>
+  </div>
+  <div class="field">
+    <%= f.label :who_received %><br />
+    <%= f.text_field :who_received %>
+  </div>
+  <div class="field">
+    <%= f.label :comentary %><br />
+    <%= f.text_field :comentary %>
+  </div>
+  <div class="field">
+    <%= f.label :reason_id %><br />
+    <%= f.number_field :reason_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,96 @@
+<%#*FORMULARIO DE INGRESO DE PRODUCTOS PARA GUIA DE TRANSPORTE%>
+
+<div>
+  <%= form_for(@transport_guide_detail) do |f| %>
+
+    <% if @transport_guide_detail.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@transport_guide_detail.errors.count, "error") %> prohibited this transport_guide from being saved:</h2>
+        <ul>
+          <% @transport_guide_detail.errors.full_messages.each do |msg| %>
+            <li>
+              <%= msg %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <div id="form_tg_detail">
+
+      <ul>
+        <li style="width: 100%">
+
+          <label>Tipo de Producto:</label>
+          <%=select("lista2", "product_type_id", ProductType.get_list_product_types, {:prompt => '-- Seleccionar --'}) %>
+          <div class="clear"></div>
+          <label>Cantidad:</label>
+          <%= f.text_field :amount,id: 'amount',maxlength: 3, size: 3, class: 'only_numbers'  %>
+          <label>Peso (kg):</label>
+          <%= f.text_field :weight, id: 'weight',maxlength: 3, size: 3, class: 'only_decimals' %>
+          <label>Costo Unitario:</label>
+          <%= f.text_field :unit_cost, id: 'unit_cost',maxlength:10, size: 10%>
+          <%= link_to '', add_detail_product_transport_guides_path, {id: 'add_product', class: 'add', remote: 'true', method: 'post'} %>
+          </li>
+          <div class="clear"></div>
+          <li>
+            <%= f.hidden_field :transport_guide_id%>
+          </li>
+        </ul>
+      </div>
+
+    <%end%>
+
+
+
+  </div>
+
+  <script type="text/javascript">
+    function eliminarFila(){
+      var cant_productos = $('#cant_productos').val();
+      cant_productos--;
+      $('#cant_productos').val(cant_productos);
+      return false;
+    }
+
+    $("#add_product").click(function(){
+
+      var product_type = $("#lista2_product_type_id").val();
+      var weight =$("#weight").val();
+      var amount =$("#amount").val();
+
+      var transport_guide_id = $("#transport_guide_id").val();
+      var unit_cost = $("#unit_cost").val();
+      var href_temp= $(this).attr("href");
+      var index = href_temp.indexOf("?");
+      var cant_product=$('#cant_productos').val();
+      if(product_type=="" || weight=="" || amount=="" || unit_cost=="") {
+        alert("Tipo de producto, peso , cantidad o costo no pueden ser nulos");
+      }
+      else{
+        var href;
+        if(index>0){
+          href=href_temp.substring(0, index);
+        }else {
+          href= href_temp;
+        }
+        if(isNaN(amount) || isNaN(unit_cost)){
+          alert("Solo numero en los campos Cantidad y Costo")
+        }else {
+          $(this).attr("href",href +
+            "?weight="+weight +
+            "&amount="+amount+
+            "&product_type_id="+product_type+
+            "&unit_cost="+unit_cost+
+            "&cant_productos="+cant_product+
+             "&transport_guide_id="+transport_guide_id);
+          cant_product++;
+          $('#cant_productos').val(cant_product);
+        }
+             
+
+      }
+            
+    });
+  
+  </script>
+

@@ -1,0 +1,23 @@
+<%= form_for(@receiver_address) do |f| %>
+  
+
+	<ul class="field-list">
+		<div>
+			<li>
+				<%= f.label :label, "Lugar" %>
+    			<%= f.text_field :label %>
+			</li>
+			<li>
+				<%= f.label :city, "Ciudad" %>
+    			<%= f.text_field :city %>
+			</li>
+			<li>
+				<%= f.label :address, "Dirección" %>
+    			<%= f.text_field :address %>
+			</li>
+        </div>
+	</ul>
+  <div class="prepend-6 center" >
+    <%= f.submit 'Agregar Dirección' %>
+  </div>
+<% end %>

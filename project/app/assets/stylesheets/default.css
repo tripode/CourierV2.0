@@ -1,0 +1,507 @@
+/*################################################################
+##########Estructura de Sitio CSSS################################
+##################################################################*/
+
+/*#####################################
+##############Colores Usados###########
+#######################################*/
+/*
+	Background: #c0c0c0
+	letras del body: #3a4f54 
+	Background de fieldset #EFEFFB
+	border del fieldset: #0B3861
+	Background del fieldset legend: #ffffff
+	letras del fieldeset legend #222
+	header background-color: #414141 
+	foot color: #444;
+*/
+/*################################################################
+#Cambios Generales en los tag del Sitio###########################
+##################################################################*/
+a {
+    color: #e33b06;
+}
+body {
+    text-align: left;
+    font: 14px /18px Arial, Helvetica, sans-serif;
+    color: #3a4f54;
+    margin: 0 auto;
+}
+fieldset{
+    border: 1px solid #0B3861;
+    margin-bottom: 10px;
+    background-color: #EFEFFB ;
+}
+fieldset legend {
+    padding: 3px 10px;
+    border: 1px solid #0B3861;
+    background-color: #ffffff;
+    color: #222;
+    font: bold 20px /normal Arial;
+    margin-left: 10px;
+}
+html {
+/*    background: #c0c0c0;*/
+}
+/*todos los textarea del proyecto tendran las mismas dimensiones
+ y la misma posición en los formularios
+*/
+textarea {
+    height: 100px;
+    padding: 5px;
+    width: 150px;
+}
+
+
+/*#####################################################################
+#Divisiones del sitio# HEAD CONTENT FOOT###############################
+#######################################################################*/
+#header {
+    height: 30px;
+    background-color: #414141;
+}
+#header .navigation .container{
+    position: fixed;
+    top: 0;
+    height: 35px !important;
+    z-index: 9;
+     width: 100%;
+
+}
+
+/*CSS DEL MENU*/
+/*
+ * Esto afecta al div que esta
+ en la esquina superior derecha
+ que muestra el nombre del usuario
+*/
+#header .navigation .container .current-user{
+    background: none repeat scroll 0 0 #414141;
+    font-weight: bold;
+    font-size: 11px;
+    color: white;
+    display: block;
+    padding: 6px 6px;
+    text-decoration: none;
+    text-align: right;
+}
+
+#header .navigation .container .current-user p{
+    margin-right: 10px;
+    display: inline;
+}
+
+#header .navigation .container .current-user a{
+    float: right;
+    margin: 0 3px 0 3px;
+}
+
+
+#footer {
+    margin-top: 10px;
+    color: #444;
+    font-size: 12px;
+    margin-left: 10px;
+    text-align: center;
+    z-index: 9;
+     
+}
+
+#content {
+    margin-top: 10px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    min-height: 650px;
+    
+}
+
+#content fieldset  ul li {
+    margin-left: 20px;
+    float: left;
+    width: 45%;
+    list-style: none;
+
+}
+#content  fieldset ul > li label, div fieldset ul > li label {
+    /* li debe ser hijo directo de ul*/
+    margin-right: 5px !important;
+    text-align: right !important;
+    width: 100px !important;
+    display: inline-block !important;
+    font-size: 12px;
+
+}
+#content  fieldset input[type="text"],
+#content  fieldset input[type="email"],
+#content  fieldset input[type="password"], 
+#content  fieldset ul li select,
+div#popup{
+    border: 1px solid #414141;
+    background-color: #FFFFFF;
+    padding: 3px 5px;
+    font-size: 13px;
+    margin-bottom: 8px;
+    /* CSS3 spicing */
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+#content fieldset  input,#content fieldset  select{
+    margin: 5px 5px;
+}
+#content fieldset  input.disable{
+    background: #cecece;
+}
+#content input:focus, #content input:active  {
+    border: 1px solid #3a4f54;
+    background-color: #ccc;
+}
+#content  fieldset  input[type="submit"]:hover{
+    border: 1px solid #13455b
+}
+
+#content  fieldset  input[type="submit"]:active{
+    background: url(button-grad-active.png) repeat-x !important;
+}
+/*los place holder de los fechas*/
+#content input:-moz-placeholder, textarea:-moz-placeholder {
+    color: #636363;
+    font-size: 12px;
+}
+/*se modifica el fielset padding*/
+#content fieldset, #IE8#HACK {
+    padding-top: 5px;
+}
+
+#content a.delete {
+    height: 16px;
+    width: 16px;
+    background: url(delete.png) no-repeat;
+    border: 0 none !important;
+    cursor: pointer;
+    padding-left: 16px !important
+}
+
+
+/*#################################################################
+##########clases Generales#########################################
+###################################################################*/
+.center{
+    text-align: center;
+}
+
+.clear {
+    clear: both;
+    height: 0px;
+}
+.hide {
+    display: none !important;
+}
+
+/*####################################################################
+##########Botones y Titulos ############################################
+######################################################################*/
+/* CREANDO LOS SUBTITULOS*/
+#content h2 {
+    font: bold 20px /40px Arial;
+    padding-left: 10px;
+    background-color: #0B3861;
+    color: #FFF;
+}
+#content h3 {
+    font: bold 12px /24px Arial Black;
+    padding-left: 10px;
+    background-color: #0B3861;
+    color: #FFF;
+}
+/* todo los titulos h4 osea los titulos 
+intermedios de las intefaces grandes */
+#content h4 {
+    margin-bottom: 0;
+}
+/*Los titulos medios de las interfaces complejas*/
+#content div.subtitle{
+    margin-bottom: 5px;
+}
+#content div.subtitle h4{
+    color: #0B3861;
+    padding-left: 10px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+/* Buttom general de todo el sistema*/
+#content input[type="submit"], 
+#content a.button, 
+#content button.button,
+div#popup input[type="button"],
+div#popup input[type="submit"],
+div#popup a.button{
+    background: url(button-grad.png) repeat-x;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 3px 15px;
+    display: inline-block;
+    margin-bottom: 12px;
+    -moz-border-radius: 11px;
+    -webkit-border-radius: 11px;
+    cursor: pointer;
+    border: 1px solid #fff;
+    margin-top: 8px;
+    margin-left: 4px;
+
+}
+div#popup p.subtitle{
+    color:#0B3861;
+    font-size: 14px;
+    font-weight: bolder;
+}
+/*Botones class ADD. Agrega campos a una tabla*/
+#content  fieldset a.add,
+#content  fieldset input.add {
+    padding-left:16px !important;
+    background:url(add.png) no-repeat !important;
+    border:0 !important;
+    cursor: pointer;
+}
+#content  fieldset  input.add:hover { border:0 !important;}
+/*Botones buscar*/
+#content  fieldset input.buscar, #content  table input.buscar {
+    background-color: #0B3861 !important;
+    border: none !important;
+    background: url(zoom.png) no-repeat !important;
+    width: 16px !important;
+    height: 16px !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    padding: 0 !important;
+    cursor: pointer;
+}
+#content  fieldset  input.buscar:hover{border: 0 !important;}
+
+/*botton Borrar editar mostrar de las tablasIndex*/
+#content table div a img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+}
+
+/*####################################################################
+Modificaciones de otros CSS Externos y privativos
+#####################################################################*/
+
+#header .navigation .container .jqueryslidemenu ul li ul li{
+    z-index: 9999;
+}
+/*Cambios en todas la tablas con buscar del Sitio*/
+
+/*La forma del filtro de todas la tablas */
+#content  .dataTables_filter input[type="text"] {
+    border: 1px solid #8A084B;
+    background-color: #FFFFFF !important;
+    padding: 3px 5px !important;
+    /*	color:#000000 !important;*/
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+    /* CSS3 spicing */
+    -moz-border-radius: 4px !important;
+    -webkit-border-radius: 4px !important;
+}
+/*Estilos en la tablas*/
+.dataTables_length, .dataTables_filter, .dataTables_info {
+    margin-bottom: 0 !important;
+    font-weight: bold !important;
+    font-size: 12px;
+}
+.no-sorting {
+    background: none;
+}
+
+/*Fin deCambios las tablas*/
+
+/*DatePicker*/
+button.ui-datepicker-trigger {
+    background: none;
+    border: none;
+    background: url('calendar.png') no-repeat !important;
+    width: 16px !important;
+    height: 16px !important;
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    padding: 0 !important;
+    margin-right: 5px !important;
+    cursor: pointer;
+    border: 1px solid #fff;
+    margin-top: 8px !important;
+    margin-left: 4px;
+}
+button.ui-datepicker-trigger {
+    border: 0 !important;
+}
+/*Datepicker color*/
+.ui-widget-header{
+    background: none;
+}
+#ui-datepicker-div thead th{ background-color: #eeeeee !important; }
+
+#ui-datepicker-div tbody tr:nth-child(even) td,  tbody tr.even td {background:none;}
+/*datepicker*/
+.ui-datepicker {
+    display: none;
+    padding: 0 !important;
+    width: 14.2em !important;
+}
+
+
+.ui-widget-content {
+    /*    background: url("../images/images-jquery-ui//ui-bg_inset-hard_100_fcfdfd_1x100.png") repeat-x scroll 50% bottom #FCFDFD;*/
+    border: 1px solid #C0C0C0 !important;
+    color: #222222;
+}
+
+.ui-datepicker table {
+    border-collapse: collapse;
+    font-size: 0.7em !important;
+    margin: 0 0 0.4em;
+    width: 100%;
+}
+
+.ui-datepicker th {
+    border: 0 none;
+    font-weight: bold;
+    padding: 0.5em 0.2em !important;
+    text-align: center;
+}
+
+.ui-state-default,  .ui-widget-content .ui-state-default,  .ui-widget-header .ui-state-default{
+    border: 1px solid #C0C0C0 !important;
+    font-weight: normal;
+}
+
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+
+.ui-datepicker-header {
+    padding: 0 !important;
+    position: relative;
+}
+table.ui-datepicker-calendar .ui-state-default{
+    background: white;
+}
+table.ui-datepicker-calendar .ui-state-active{
+    background:whitesmoke;
+}
+table.ui-datepicker-calendar .ui-state-highlight{
+    background-color: #d5d5ff;
+}
+
+
+/*Cambios a una tabla local, se usa en manifiesto 
+        de carga */
+.sorting_asc{
+    min-width: 20px;
+}
+
+/*Pequeña tabla local, se usa en manifiesto de carga*/
+#content div#tablaLocal_wrapper tabla tbody tr.odd td{
+    /*    border-bottom-color: #000000 !important;*/
+    border-bottom-style: solid !important;
+    border-bottom-width: medium !important;
+}
+/* Sacar el filtro en la tabla*/
+#content div#tablaLocal_wrapper div.dataTables_filter{
+    display: none !important;
+}
+/*las letras de los productos de la guia de transporte*/
+#content table#tablaLocal td table td{
+    font-style: oblique;
+    color: #000000;
+    font-size: 10px;
+    padding: 0 5px;
+    width: 70%;
+}
+/*Tamaño de las letras de toda la tabla*/
+#content table#tablaLocal td{
+    font-style: normal;
+    color: #000000;
+    font-size: 12px;
+}
+/*setea los colores de los tr*/
+#content table#tablaLocal tr.even td{ background-color: #ccccff !important;}
+#content table#tablaLocal tr.odd td{background-color: white !important;}
+#content table#tablaLocal th.sorting {background-image: none;}
+
+
+/*Fin de la modificaciones de la tabla local*/
+
+
+
+/*##############################################################*/
+/*##############################################################*/
+/*Cambios Especificos por Paginas del Sitio
+/*##############################################################*/
+/*##############################################################*/
+
+/*
+ * Formulario Usuario
+*/
+#content fieldset ul.field-list li{width: 100%;}
+
+/*
+ * Aplicado a los roles de usuarios dentro de la
+ * interfaz Usuario.
+*/
+#content  fieldset ul.field-list li label{
+    text-align: left !important;/*must be left*/
+    margin-right: 5px !important;
+    width: 100px;
+    display: inline-block !important;
+    font-size: 12px;
+}
+#content p.role-description{padding-top: 20px;}
+
+/*FIN DE FORMULARIO USUARIO*/
+
+
+/*ESTILO USADO EN EL INGRESO DE PRODUCTOS DE GUIA DE TRANSPORTE*/
+#content fieldset div#form_tg_detail  ul > li label{
+    width: auto !important;
+}
+#content div#table_transport_guide_detail table#product_table tr{
+    font-size: 13px;
+
+}
+
+/*#################################################################
+##########Css de popin agregar usuarios############################
+###################################################################*/
+.ui-widget-overlay{
+  opacity: .50 !important; /* Make sure to change both of these, as IE only sees the second one */
+  filter: Alpha(Opacity=50) !important;
+
+  background-color: rgb(50, 50, 50) !important; /* This will make it darker */
+}
+
+.ui-dialog-titlebar{
+    background-color: #414141;
+    color: white;
+}
+
+.ui-dialog-titlebar-close{
+    background-image: url("/assets/close.png") !important;
+    background-position: -8px -9px;
+}
+
+.large-label{
+    width: 120px !important;
+}
+/* este css es para el boton desabilidato */
+.disabled{
+    background-color: #ccc !important;
+    background-image: none !important;
+}
+
+.info-link{
+    color: #8866CC;
+}

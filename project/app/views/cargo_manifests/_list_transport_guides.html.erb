@@ -1,0 +1,83 @@
+
+<div class="span-20 prepend-top last">
+
+  <fieldset >
+      <table  columnClasses="center,center,center,center,center,center,center"
+              headerClass="center"
+              rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+              border="1" id="tablaLocal" class="display" >
+        <thead>
+          <tr>
+            <th style="width: 10px;">N&#176;  </th>
+            <th>Remitente</th>
+            <th>Destinatario</th>
+            <th>Cliente</th>
+
+            <th><div style="width: 255px;">Producto<span style="color:#0B3861; ">________________</span>  Cantidad <span style="color:#0B3861; ">____</span> Peso</div></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transport_guides.each do |transport_guide| %>
+            
+            <tr>
+              <%=hidden_field(:transport_guides_list,transport_guide.id, :value=>transport_guide.id)%>
+              <td><%= transport_guide.num_guide %></td>
+              <td><%= transport_guide.remitter_person %></td>
+              <td><%= transport_guide.destination_person %></td>
+              <td><%= transport_guide.customer.company_name %></td>
+              <td>
+                <table>
+                  <thead>
+
+                  </thead>
+                  <tbody>
+                    <%@transport_guide_details = get_tg_details(transport_guide.id)%>
+                    <% @transport_guide_details.each do |detail| %>
+                      <tr>
+                        <td><%= detail.product_type.description %></td>
+                        <td><%= detail.amount %></td>
+                        <td><%= detail.weight %></td>
+                      </tr>
+                    <%end%>
+                  </tbody>
+
+                </table>
+              </td>
+
+              <td><%= link_to image_tag('editar.gif'), edit_transport_guide_path(transport_guide) %></td>
+              <td><%= link_to image_tag('borrar2.gif'), delete_detail_cargo_manifest_path(transport_guide), method: 'post', remote: 'true'%></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%data=get_totals(@transport_guides)%>
+      <%=hidden_field(:data, :total_weight, :value=> data[1])%>
+      <%=hidden_field(:data, :total_products, :value=> data[2])%>
+      <%=hidden_field(:data, :total_guides, :value=> data[0])%>
+
+  </fieldset>
+</div>
+<script type="text/javascript">
+  $('table[id*=tablaLocal]').dataTable({
+
+          "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+          "bRetrieve": true
+        });
+
+
+    $(function(){
+        var weight=$("#data_total_weight").val();
+        var products=$("#data_total_products").val();
+        var guides=$("#data_total_guides").val();
+        $("#cargo_manifest_total_guides").val(guides);
+        $("#cargo_manifest_total_products").val(products);
+        $("#cargo_manifest_total_weight").val(weight);
+
+    });
+
+
+
+    </script>
+

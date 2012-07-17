@@ -1,0 +1,32 @@
+<div>
+
+</div>
+
+
+<div class="span-24">
+  <div class="span-7">
+    <%= image_tag ("courier.jpg") %>
+  </div>
+  <div class="span-17 last">
+    <section class="ac-container">
+      <%i=0%>
+      <% @link.each do |help| %>
+      <div>
+        <input id="<%= "ac-#{i}" %>" name="accordion-1" type="radio" checked />
+        <label for="<%= "ac-#{i}" %>" ><%=help  %></label>
+        <article class="ac-large">
+          <p><%= @link_helps[i] %></p>
+        </article>
+      </div>
+      <%i+=1%>
+      <% end %>
+
+    </section>
+<%# @helps.each do |help| %>
+<%#*<div class="span-14 " style="margin-bottom: 6px;">%>
+<%#= link_to help, '#', :class => 'info-link' %>
+<%#*</div>%>
+<%# end %>
+  </div>
+
+</div>

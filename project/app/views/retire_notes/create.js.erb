@@ -1,0 +1,7 @@
+$("#form_retire_note").html("<%= escape_javascript (render 'retire_note')%>");
+$("#form_list_retire_note").html("<%= escape_javascript (render 'list')%>");
+$('table[class*=tablaIndex]').dataTable({
+          "bScrollCollapse" : true,
+          "sPaginationType" : "full_numbers",
+          "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+ });

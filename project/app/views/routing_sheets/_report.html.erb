@@ -1,0 +1,72 @@
+<div class="span-24 left">
+	<fieldset>
+		<legend>
+			Cargar Informe Hoja de Ruta
+		</legend>
+	
+	<%= form_tag({:action => 'get_details'}, :remote => true) do  %>
+	  <ul>
+	  	
+	  	<li>
+	    	<label for="number">Nro:</label>
+	    	 <input id="number" type="text"  value="" size="5" maxlength="7" />
+	    	<%= hidden_field_tag :routing_sheet_id, nil,size: 15, maxlength: 15, id: 'routing_sheet_id'%>
+	  	</li>
+	  	<li>
+	    	<label>Repartidor:</label>
+	    	<input id="employee" type="text" style="width: 50%" value="" disabled="true"  />
+	    	
+	    	
+	  	</li>
+	  	<div class="clear"></div>
+	  	<li>
+	  		<label>Zona:</label>
+   			<input id="zone" type="text" style="width: 50%" value="" disabled="true"  />
+	  	</li>
+	    <li>
+	    	<label>Estado:</label>
+	    	<input id="state" type="text" style="width: 50%" value="" disabled="true"  />
+	  	</li>
+	  </ul>
+	  </fieldset>
+	 
+</div>
+  <div class="span-24 center last" >
+			<%= submit_tag 'Listar productos', id: 'button_search_id'%>
+ </div>
+<% end %>
+
+
+<script>
+	$("#number").focus();
+	//Autocomplete de hojas de rutas
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @routing_sheets.each do |r| %>
+		 	list[i]={
+		 		label: "<%= r.number %>",zone: "<%= r.area.area_name%>",state:"<%= r.routing_sheet_state.state_name%>",
+		 		id: <%= r.id%>, employee_name: "<%=r.employee.last_name + ' ' + r.employee.name %>", employee_id:<%= r.employee_id%>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#number").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#routing_sheet_id").val(ui.item.id); 
+				$("#employee").val(ui.item.employee_name);
+				$("#zone").val(ui.item.zone);
+				$("#state").val(ui.item.state);
+			}
+		});
+	});
+	var f1 = new LiveValidation('number', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+    var f2 = new LiveValidation('employee', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+    var f3 = new LiveValidation('zone', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f3.add( Validate.Numericality, { notANumberMessage: " " } );
+        f3.add( Validate.Presence, { failureMessage: " " } );
+    var f4 = new LiveValidation('state', { validMessage: " ",onlyOnSubmit: true,wait: 500 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+</script>

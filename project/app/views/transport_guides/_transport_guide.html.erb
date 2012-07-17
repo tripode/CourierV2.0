@@ -1,0 +1,315 @@
+<div class="span-24 last">
+  <%= form_for(@transport_guide) do |f| %>
+
+
+    <fieldset>
+      <legend>
+        Registrar Guia de Transporte
+      </legend>
+      <div id="form_notice">
+        <input id="notice" size="100" value="<%= notice %>" disabled="disabled" style="background:none; border:none; color: green; font-weight: bold" />
+      </div>
+      <ul>
+        <li>
+          <label>* N&#176;:</label>
+          <%= f.text_field :num_guide, maxlength: 6, size:6, class: 'only_numbers' %>
+
+            <%= f.hidden_field :id, id: "transport_guide_id"%>
+          </li>
+          <li>
+            <label>Fecha:</label>
+            <%= f.text_field :created_at, {value: @transport_guide.format_date, class:'i_fecha', maxlength: 12, size:12, disable: true} %>
+            </li>
+            <li>
+              <%= f.hidden_field :employee_id, {value: current_user.employee.id} %>
+            </li>
+            <div class="clear"></div>
+            <!--  Datos del Remitente primera seccion -->
+            <div class="subtitle">
+              <h4>Datos del Remitente</h4>
+            </div>
+            <div class="clear"></div>
+
+            <li>
+              <label>* Origen: </label>
+              <input id="origin_city" type="text" class="i_autocomplit"/>
+              <%= f.hidden_field :origin_city_id, id: 'origin_city_id_hidden',class: 'i_autocomplit' %>
+
+
+              </li>
+              <li>
+                <label> *Empresa/Cliente:</label>
+                <input id="customer" type="text" size="15" class="i_autocomplit"/>
+                <%= f.hidden_field :customer_id, id: 'customer_id_hidden',class: 'i_autocomplit' %>
+
+                </li>
+
+                <div class="clear"></div>
+                <li>
+
+                  <label>Remitente: </label>
+
+                  <%= f.text_field :remitter_person,  maxlength: 30,size: 30 %>
+
+                </li>
+                <div class="clear"></div>
+                <li style="width: 100%">
+                  <label>Dirección: </label>
+                  <%= f.text_field :remitter_address, maxlength: 79,size: 88 %>
+                </li>
+
+
+                <!-- Datos del Destinatario Segunda Sección -->
+                <div class="clear"></div>
+                <div class="subtitle">
+                  <h4>Datos del Destinatorio</h4>
+                </div>
+                <div class="clear"></div>
+                <li>
+                  <label>* Destino:</label>
+                  <input id="destination_city" type="text" class="i_autocomplit"/>
+                  <%= f.hidden_field :destination_city_id, id: 'destination_city_id_hidden' %>
+
+
+                </li>
+                <li>
+                  <label>* Empresa:</label>
+                  <input id="receiver_company" type="text" size="15" class="i_autocomplit" />
+                  <%= f.hidden_field :receiver_company_id, id: 'receiver_company_id_hidden' %>
+
+
+                </li>
+                <div class="clear"></div>
+                <li>
+                  <label>Destinatario:</label>
+                  <%= f.text_field:destination_person, maxlength: 30, size: 30 %>
+                </li>
+                <div class="clear"></div>
+                <li style="width: 100%">
+                  <label>Direccion:</label>
+                  <%= f.text_field :destination_address, maxlength: 79,size: 88  %>
+                </li>
+
+
+                <!-- Datos del Destinatario Segunda Sección -->
+                <div class="clear"></div>
+                <div class="subtitle">
+                  <h4>Condiciones Generales del Transporte</h4>
+                </div>
+                <div class="clear"></div>
+
+
+                <li style="width:100%">
+                  <label style="width: auto !important;">* Tipo de Servicio:</label>
+                  <%= f.select :service_type_id, @transport_guide.get_list_service_types, prompt: "-- Seleccionar--"  %>
+
+                  <label style="width:auto !important;">* Forma de Pago:</label>
+
+                  <%= f.select :payment_method_id, @transport_guide.get_list_payments_methods, prompt: "-- Seleccionar--"  %>
+
+                  <%if @hide_state==false%>
+                    <label style="width:auto !important;" class="<%= @hide_state %>">Estado:</label>
+                    <%= f.select :transport_guide_state_id, @transport_guide.get_list_state, class: @hide_state %>
+                    <%end%>
+
+
+                  </li>
+                </ul>
+                <div class="clear"></div>
+                <div class="subtitle">
+                  <h4>Ingreso de Productos *</h4>
+                </div>
+                <div class="clear"></div>
+
+
+                <div id="form_transport_guide_detail" class="span-22 last">
+                  <%=render 'details'%>
+                  <div id="table_transport_guide_detail" class="span-11 prepend-1 last">
+                    <%=render 'list_details'%>
+                  </div>
+                  <div class="span-8 center prepend-top last" >
+                    <%= f.submit 'Guardar', id: 'save_button' %>
+                    <%= link_to 'Limpiar',new_transport_guide_path, class: 'limpiar button'%>
+                      <%= link_to 'Cancelar' ,'../main_page/index' ,class: 'button', id: 'cancel_button'%>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                <% end %>
+              </div>
+
+              <script type="text/javascript">
+    
+
+                $('.limpiar').click(function() {
+                  $('input[type=text]').val("");
+                  $('input[type=number]').val("");
+
+                });
+                $(function() {
+                  $("input").focus(function () {
+                    $("#notice").val("");
+                  })
+
+                  //focus en el formulario
+                  $("form:not(.filter) :input:visible:enabled:first").focus();
+          
+                  //AutoComplite de Origenes
+                  var list =[];
+                  var i=0;
+              <% @cities.each do |c| %>
+                    list[i]={
+                      label: "<%= c.name%>",
+                      id: <%= c.id %> };
+                    i=i+1;
+              <% end %>
+                  $("#origin_city").autocomplete({
+                    source: list,
+                    select: function(event, ui) {
+                      $("#origin_city_id_hidden").val(ui.item.id);
+
+                    }
+                  });
+                  $("#destination_city").autocomplete({
+                    source: list,
+                    select: function(event, ui) {
+                      $("#destination_city_id_hidden").val(ui.item.id);
+
+                    }
+                  });
+          
+                  if($("#origin_city_id_hidden").val()!= "") {
+                    //Cuando el id de la Ciudad de origen no es vacio se setea el nombre de la ciudad en el campo
+                    //Esto se usa cuando se edita la Guia de Transporte,
+                    //al hacer click en edit setea La ciudad de origen
+                    $("#save_button").val("Actualizar");
+                    var id=$("#origin_city_id_hidden").val();
+                    var name= ""
+                    // busca la ciudad dentro de la lista
+                    $(list).each(function(index,element){
+                      if(element.id == id){
+                        name=element.label
+                        return true
+                      }
+                    })
+                    //setea el nombre del empleado en el campo employee
+                    $("#origin_city").val(name);
+                  }
+                  if($("#destination_city_id_hidden").val()!= "") {
+              
+                    //Esto se usa cuando se edita la Guia de Transporte,
+                    //al hacer click en edit setea La ciudad de destino
+                    $("#save_button").val("Actualizar");
+                    var id=$("#destination_city_id_hidden").val();
+                    var name= ""
+                    $(list).each(function(index,element){
+                      if(element.id == id){
+                        name=element.label
+                        return true
+                      }
+                    })
+                    $("#destination_city").val(name);
+                  }
+         
+           
+                });
+                //Autocomplite de clientes (Empresa Origen y destino)
+                $(function() {
+                  var list =[];
+                  var i=0;
+              <% @customers.each do |c| %>
+                    list[i]={
+                      label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+                      id: <%= c.id %>};
+                    i=i+1;
+              <% end %>
+                  $("#customer").autocomplete({
+                    source: list,
+                    select: function(event, ui) {
+                      $("#customer_id_hidden").val(ui.item.id);
+
+                    }
+
+                  });
+                  $("#receiver_company").autocomplete({
+                    source: list,
+                    select: function(event, ui) {
+                      $("#receiver_company_id_hidden").val(ui.item.id);
+
+                    }
+
+                  });
+                  //cuando se da editar carga los campos
+                  if($("#receiver_company_id_hidden").val()!= "") {
+                    $("#save_button").val("Actualizar");
+                    var id=$("#receiver_company_id_hidden").val();
+                    var name= ""
+                    $(list).each(function(index,element){
+                      if(element.id == id){
+                        name=element.label
+                        return true
+                      }
+                    })
+                    $("#receiver_company").val(name);
+                  }
+                  if($("#customer_id_hidden").val()!= "") {
+                    $("#save_button").val("Actualizar");
+                    var id=$("#customer_id_hidden").val();
+                    var name= ""
+                    $(list).each(function(index,element){
+                      if(element.id == id){
+                        name=element.label
+                        return true
+                      }
+                    })
+                    $("#customer").val(name);
+                  }
+                });
+                //VALIDACIONES
+                var f1 = new LiveValidation('transport_guide_num_guide', { validMessage: " ",onlyOnSubmit: true , wait: 500 });
+                f1.add( Validate.Numericality, { notANumberMessage: "Debe ser un Numero" } );
+                f1.add( Validate.Presence, { failureMessage: " " } );
+
+                //Validacion de Datos del Remitente
+                var f2 = new LiveValidation('origin_city', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f2.add( Validate.Presence, { failureMessage: " " } );
+
+                var f3 = new LiveValidation('customer', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f3.add( Validate.Presence, { failureMessage: " " } );
+
+
+                //Datos del Destinatorio
+                var f5 = new LiveValidation('destination_city', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f5.add( Validate.Presence, { failureMessage: " " } );
+
+                var f6 = new LiveValidation('receiver_company', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f6.add( Validate.Presence, { failureMessage: " " } );
+
+                //Condiciones Generales
+                var f7 = new LiveValidation('transport_guide_service_type_id', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f7.add( Validate.Presence, { failureMessage: " " } );
+
+                var f8 = new LiveValidation('transport_guide_payment_method_id', { validMessage: " ",onlyOnSubmit: true , wait: 500});
+                f8.add( Validate.Presence, { failureMessage: " " } );
+
+                //###### HOTKEYS ######
+
+                //Cuando se realiza la combinación de Ctrl + a realizara un click
+                // sobre el boton add para agregar un campo a la tabla productos
+                $(document).bind('keydown', 'ctrl+a', function(){
+                  $("#add_product").click();
+                });
+                //Cuando se realiza la combinación de Ctrl + g guarda el proyecto
+                // o lo actualiza
+                $(document).bind('keydown', 'ctrl+g', function(){
+                  $("#save_button").click();
+                });
+                //Cuando se realiza la combinación de Ctrl + x sale de la interfaz
+                //y va al index
+                $(document).bind('keydown', 'ctrl+x', function(){
+                  $("#cancel_button").click();
+                });
+    
+              </script>
+
+

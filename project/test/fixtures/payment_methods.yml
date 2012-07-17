@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name_payment: MyString
+  description: MyString
+
+two:
+  name_payment: MyString
+  description: MyString

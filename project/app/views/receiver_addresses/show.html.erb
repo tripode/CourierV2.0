@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Id:</b>
+  <%= @receiver_address.id %>
+</p>
+
+<p>
+  <b>Label:</b>
+  <%= @receiver_address.label %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @receiver_address.address %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @receiver_address.city_id %>
+</p>
+
+<p>
+  <b>Receiver:</b>
+  <%= @receiver_address.receiver_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_receiver_address_path(@receiver_address) %> |
+<%= link_to 'Back', receiver_addresses_path %>

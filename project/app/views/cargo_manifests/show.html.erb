@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Created at:</b>
+  <%= @cargo_manifest.created_at %>
+</p>
+
+<p>
+  <b>Manifest num:</b>
+  <%= @cargo_manifest.manifest_num %>
+</p>
+
+<p>
+  <b>Origin city:</b>
+  <%= @cargo_manifest.origin_city_id %>
+</p>
+
+<p>
+  <b>Destiny city:</b>
+  <%= @cargo_manifest.destiny_city_id %>
+</p>
+
+<p>
+  <b>Employee:</b>
+  <%= @cargo_manifest.employee_id %>
+</p>
+
+<p>
+  <b>Total guides:</b>
+  <%= @cargo_manifest.total_guides %>
+</p>
+
+<p>
+  <b>Total products:</b>
+  <%= @cargo_manifest.total_products %>
+</p>
+
+<p>
+  <b>Total weight:</b>
+  <%= @cargo_manifest.total_weight %>
+</p>
+
+
+<%= link_to 'Edit', edit_cargo_manifest_path(@cargo_manifest) %> |
+<%= link_to 'Back', cargo_manifests_path %>

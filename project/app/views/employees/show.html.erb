@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+
+
+<p>
+  <b>Nombre:</b>
+  <%= @employee.name %>
+</p>
+
+<p>
+  <b>Apellido:</b>
+  <%= @employee.last_name %>
+</p>
+
+<p>
+  <b>Cedula de Identidad:</b>
+  <%= @employee.num_identity %>
+</p>
+
+<p>
+  <b>Dirección:</b>
+  <%= @employee.address %>
+</p>
+
+<p>
+  <b>Dia de Ingreso:</b>
+  <%= @employee.format_admission_date%>
+</p>
+
+<p>
+  <b>Fecha de Nacimiento:</b>
+  <%= @employee.format_birthday %>
+</p>
+
+<p>
+  <b>Salario</b>
+  <%= @employee.salary %>
+</p>
+
+<p>
+  <b>Numero de Celular:</b>
+  <%= @employee.mobile_number %>
+</p>
+
+<p>
+  <b>Numero de Telefono:</b>
+  <%= @employee.phone_number %>
+</p>
+<p>
+  <b>Email:</b>
+  <%= @employee.email %>
+</p>
+
+<p>
+  <b>Cargo:</b>
+  <%= @employee.function_type.description %>
+</p>
+
+
+<%= link_to 'Regresar', new_employee_path %>

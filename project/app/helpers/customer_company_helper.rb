@@ -1,0 +1,2 @@
+module CustomerCompanyHelper
+end

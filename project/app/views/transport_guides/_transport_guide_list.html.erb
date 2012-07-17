@@ -1,0 +1,61 @@
+<table columnClasses="center,center,center,center,center,center,center,center,center,center,center,center,center,center,center"
+       headerClass="center"
+       rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+       border="1" class="tablaIndex display"  bgcolor="white"> 
+  <thead>
+    <tr>
+      <th>N&#176;</th>
+      <th>Destinatario</th>
+
+      <th>Remitente</th>
+
+      <th>Cliente</th>
+
+      <th>Tipo de Servicio</th>
+
+      <th>Destino</th>
+      <th>Origen</th>
+      <th>Estado</th>
+      <th>Fecha Creación</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transport_guides.each do |transport_guide| %>
+
+      <tr>
+        <td><%= transport_guide.num_guide %></td>
+        <td><%= transport_guide.destination_person %></td>
+        <td><%= transport_guide.remitter_person %></td>
+
+        <td><%= transport_guide.customer.company_name %></td>
+
+        <td><%= transport_guide.service_type.description %></td>
+
+        <td><%= City.find(transport_guide.destination_city_id).name  %></td>
+        <td><%= City.find(transport_guide.origin_city_id).name   %></td>
+        <td><%= transport_guide.transport_guide_state.name_state %></td>
+        <td><%= transport_guide.created_at %></td>
+        <%unless TransportGuideState.procesado == transport_guide.transport_guide_state_id.to_i%>
+          <td><%= link_to image_tag('editar.gif'), edit_transport_guide_path(transport_guide) %></td>
+          <td><%= link_to image_tag('borrar2.gif'), transport_guide, confirm: 'Are you sure?', method: :delete %></td>
+        <%else%>
+          <td></td>
+          <td></td>
+        <%end%>
+        
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<script type="text/javascript">
+  $(function() {
+    $('table[class*=tablaIndex]').dataTable({
+      "bScrollCollapse" : true,
+      "bRetrieve": true,
+      "sPaginationType" : "full_numbers",
+      "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+    });
+  });
+</script>

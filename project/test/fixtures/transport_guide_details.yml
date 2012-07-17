@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  transport_guide_id: 1
+  amount: 1
+  product_type_id: 1
+  weight: 9.99
+
+two:
+  transport_guide_id: 1
+  amount: 1
+  product_type_id: 1
+  weight: 9.99
