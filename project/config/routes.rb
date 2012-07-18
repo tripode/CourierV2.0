@@ -1,5 +1,7 @@
 Project::Application.routes.draw do
   
+  resources :invoices
+
   resources :helps
   #resources :receiver_addresses
 

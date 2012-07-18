@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  date: 2012-07-17 20:49:57
+  customer_id: 1
+  total: 9.99
+  number: MyString
+  payment_method_id: 1
+  iva5: 9.99
+  iva10: 9.99
+
+two:
+  id: 1
+  date: 2012-07-17 20:49:57
+  customer_id: 1
+  total: 9.99
+  number: MyString
+  payment_method_id: 1
+  iva5: 9.99
+  iva10: 9.99
