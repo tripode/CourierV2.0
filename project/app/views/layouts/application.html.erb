@@ -190,8 +190,15 @@
                   </ul>
                 </li>
               <% end %>
+              <% if can? :manage, Invoice %>
+                <li><a href="#">Administracion</a>
+                  <ul>
+                    <li><%= link_to "Facturacion", new_invoice_path %></li>
+                  </ul>
+                </li>
+              <% end %>
               <% if can? :manage, User %>
-                <li><a href="#">Administración</a>
+                <li><a href="#">Perfil</a>
                   <ul>
                     <li><%= link_to "Usuarios", new_user_registration_path %></li>
                   </ul>

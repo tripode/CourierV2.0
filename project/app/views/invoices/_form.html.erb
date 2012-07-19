@@ -1,49 +1,63 @@
-<%= form_for(@invoice) do |f| %>
-  <% if @invoice.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+<div class="span-24 left">
+	<fieldset>
+		<legend>Facturacion</legend>
+		<fieldset>
+		<%= form_for(@invoice) do |f| %>
+		<ul>
+			<li>
+				<label>Factura Nro:</label>
+				<%= f.text_field :number, size: 15 %>
+			</li>
+			<li>
+				<label>Fecha:</label>
+				 <%= f.text_field :date, id:'date',value: @invoice.format_date,style: 'width: 28%', class:'i_fecha'%>
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Cliente:</label>
+				<input id="customer" type="text" style="width: 60%" class="i_autocomplit"  />
+				<%= f.hidden_field :customer_id, id: 'customer_id_hidden' %>   
+			</li>
+			<li>
+				<label>Forma de Pago:</label>
+				 <%= f.select :payment_method_id, @invoice.get_list_payments_methods, prompt: "-- Seleccionar--"  %>
+			</li>
+			<div class="clear"></div>
+		</ul>
+		</fieldset>
+		<div class="span-24 center last" >
+			<%= f.submit 'Guardar', id: 'save_button' %>
+			<%= link_to 'Limpiar',new_invoice_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+		</div>
+		<% end %>
+		<div id="add_detail_form">
+			<%= render 'add_detail'%>
+		</div>
+		
+	</fieldset>
+</div>
+<script>
+	//Autocomplite de clientes
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @customers.each do |c| %>
+		 	list[i]={
+		 		label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#customer").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#customer_id_hidden").val(ui.item.id); 
+				$("#customer_hidden").val(ui.item.id); 
+			}
+		});
+	});
+	
+</script>
+  
 
-      <ul>
-      <% @invoice.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :id %><br />
-    <%= f.number_field :id %>
-  </div>
-  <div class="field">
-    <%= f.label :date %><br />
-    <%= f.datetime_select :date %>
-  </div>
-  <div class="field">
-    <%= f.label :customer_id %><br />
-    <%= f.number_field :customer_id %>
-  </div>
-  <div class="field">
-    <%= f.label :total %><br />
-    <%= f.text_field :total %>
-  </div>
-  <div class="field">
-    <%= f.label :number %><br />
-    <%= f.text_field :number %>
-  </div>
-  <div class="field">
-    <%= f.label :payment_method_id %><br />
-    <%= f.number_field :payment_method_id %>
-  </div>
-  <div class="field">
-    <%= f.label :iva5 %><br />
-    <%= f.text_field :iva5 %>
-  </div>
-  <div class="field">
-    <%= f.label :iva10 %><br />
-    <%= f.text_field :iva10 %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>

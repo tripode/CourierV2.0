@@ -1,6 +1,6 @@
 Project::Application.routes.draw do
   
-  resources :invoices
+ 
 
   resources :helps
   #resources :receiver_addresses
@@ -108,7 +108,12 @@ Project::Application.routes.draw do
       post 'getCountry'
     end
   end
-
+  
+   resources :invoices do
+     collection do
+       post 'add_detail'
+     end
+   end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
