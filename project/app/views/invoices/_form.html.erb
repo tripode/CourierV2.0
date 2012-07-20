@@ -19,10 +19,14 @@
 				<%= f.hidden_field :customer_id, id: 'customer_id_hidden' %>   
 			</li>
 			<li>
+				<label>Ruc:</label>
+				<input type="text" id="ruc_id" size="13"  />
+			</li>
+			<div class="clear"></div>
+			<li>
 				<label>Forma de Pago:</label>
 				 <%= f.select :payment_method_id, @invoice.get_list_payments_methods, prompt: "-- Seleccionar--"  %>
 			</li>
-			<div class="clear"></div>
 		</ul>
 		</fieldset>
 		<div class="span-24 center last" >
@@ -45,7 +49,7 @@
 		<% @customers.each do |c| %>
 		 	list[i]={
 		 		label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
-		 		id: <%= c.id %>};
+		 		id: <%= c.id %>, ruc:<%= c.ruc%>};
 			i=i+1;
 		<% end %>
 		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
@@ -54,9 +58,11 @@
 			select: function(event, ui) { 
 				$("#customer_id_hidden").val(ui.item.id); 
 				$("#customer_hidden").val(ui.item.id); 
+				$("#ruc_id").val(ui.item.ruc);
 			}
 		});
 	});
+	
 	
 </script>
   

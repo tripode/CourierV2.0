@@ -112,6 +112,8 @@ Project::Application.routes.draw do
    resources :invoices do
      collection do
        post 'add_detail'
+       post 'getTotal'
+       post 'getTotalIva10'
      end
    end
   # The priority is based upon order of creation:

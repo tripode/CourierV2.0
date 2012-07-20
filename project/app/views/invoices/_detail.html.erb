@@ -5,25 +5,34 @@
 	border="1" class="tablaIndex display"  bgcolor="white">
 	<thead>
 	  <tr>
-	  	<th>Item</th>
-	  	<th>Nro Nota de Retiro</th>
-	    <th>Tipo de Producto</th>
-	    <th>Cantidad</th>
-	    <th>Precio Unitario</th>
+	  	<th>Fecha</th>
+	    <th>Servicio</th>
+	    <th>Cant</th>
+	    <th>Monto</th>
+	    <th>IVA 10%</th>
+	    <th>Tipo de producto</th>
+	    <th>Destino</th>
+	    <th>Nota Retiro</th>
 	    <th>Sub Total</th>
-	    <th></th>
 	  </tr>
 	</thead>
         <tbody id="tbody-details">
 	<% $details.each do |detail| %>
 	  <tr>
-	  	<td><%= $details.index(detail) + 1 %></td>
-	  	<td><%= detail.number%></td>
-	  	<td><%= detail.product_type.description %></td>
+	  	<td><%= detail.date%></td>
+	  	<td><%= detail.service_type.description %></td>
 	  	<td><%= detail.amount %></td>
 	  	<td><%= detail.unit_price%></td>
-	  	<td><%= (detail.unit_price *= detail.amount) %></td>
+	  	<td><%= (detail.unit_price / 10) %></td>
+	  	<td><%= detail.product_type.description%></td>
+	  	<td><%= detail.city.name%></td>
+	  	<td><%= detail.number%> </td>
+	  	<td><%= (detail.unit_price * detail.amount) %></td>
+	  	<td></td>
 	  </tr>
 	<% end %>
 	</tbody>
 </table>
+<script>
+	
+</script>

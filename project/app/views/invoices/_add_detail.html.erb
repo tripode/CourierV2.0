@@ -15,14 +15,14 @@
 	</div>
 	<ul>
 		<li  style="width: 80%; alignment-adjust: center !important">
-			<label style="width: auto !important;">Iva 5%</label>
-			<%= text_field_tag :iva5,nil, size: 10%>
-			<label style="width: auto !important;">Iva 10%</label>
-			<%= text_field_tag :iva10,nil, size: 10%>
 			<label style="width: auto !important;">Total Iva%</label>
-			<%= text_field_tag :total_iva,nil, size: 10%>
+			<%= text_field_tag :total_iva,nil,id:'total_iva', size: 10, disabled: true%>
 			<label style="width: auto !important;">Total</label>
-			<%= text_field_tag :total,nil, size: 10%>
+			<%= text_field_tag :total,nil,id:'total', size: 10, disabled: true%>
 		</li>
 	</ul>
 </fieldset>
+<script>
+	
+	
+</script>

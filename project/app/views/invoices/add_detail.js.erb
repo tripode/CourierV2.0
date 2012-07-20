@@ -4,3 +4,15 @@ $('table[class*=tablaIndex]').dataTable({
           "sPaginationType" : "full_numbers",
           "aLengthMenu" : [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
  });
+ //Calcula el total de la factura
+ $.post("<%= getTotal_invoices_path %>",
+			{id:'1'},
+			function(total){
+				$("#total").val(total);
+			},"json");
+//Calcula el iva 10%
+$.post("<%= getTotalIva10_invoices_path %>",
+			{id:'1'},
+			function(total){
+				$("#total_iva").val(total);
+			},"json");

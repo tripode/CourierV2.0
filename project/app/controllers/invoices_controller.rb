@@ -107,7 +107,7 @@ class InvoicesController < ApplicationController
         customer = Customer.find(customer)
         if !customer.nil?
           selected_retire_note = RetireNote.where(number: retire_note, customer_id: customer).first
-          if !selected_retire_note.nil?
+          if !selected_retire_note.nil? && !$details.include?(selected_retire_note)
             $details << selected_retire_note
           end
         end
@@ -116,6 +116,29 @@ class InvoicesController < ApplicationController
       respond_to do |format|
         format.js
       end
-      
+  end
+  ## Retoran el monto total de la factura
+  def getTotal
+    total = 0
+    $details.each do |detail|
+      total+=(detail.unit_price * detail.amount)
+    end
+    respond_to do |format|
+      format.html 
+      format.json { render json: total}
+    end
+  end
+  
+  ## Retorna el iva 10% sobre el monto 
+  ## Retoran el monto total de la factura
+  def getTotalIva10
+    total = 0
+    $details.each do |detail|
+      total+=(detail.unit_price / 10)
+    end
+    respond_to do |format|
+      format.html 
+      format.json { render json: total}
+    end
   end
 end
