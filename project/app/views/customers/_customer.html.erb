@@ -67,13 +67,6 @@
 ///focus en el formulario
           $("form:not(.filter) :input:visible:enabled:first").focus();
 	
-	$('.limpiar').click(function() {
-		$('input[type=text]').val("");
-		$('input[type=number]').val("");
-		$('#form_notice').hide();
-
-	});
-	
 	$(document).ready(function(){
      	//Comprueba que se teclee solo numeros
 		$("#num_identify").keypress(function (e)

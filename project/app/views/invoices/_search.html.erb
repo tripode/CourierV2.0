@@ -1,0 +1,94 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Buscar Facturas
+		</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+		</div>
+		<%= form_tag({:action => 'search'}, :remote => true)  do %>
+		<ul>
+		  <li>
+		    <label>* Desde Fecha:</label>
+		    <%= text_field_tag :start_date, @invoice.format_date,id: 'start_date',style: 'width: 28%',class:'i_fecha' %>
+		  </li>
+		  <li>
+		    <label>* Hasta Fecha:</label>
+		    <%= text_field_tag :end_date,@invoice.format_date,id:'end_date',style: 'width: 28%', class:'i_fecha'%>
+		  </li>
+		  <div class="clear"></div>
+		  <li>
+		    <label>Numero:</label>
+		    <%= text_field_tag :number,"",id: 'number_id', style: 'width: 30%', :maxlength => 30 %>
+		  </li>
+		  <li>
+		    <label for="customer">Cliente:</label>
+		    <input id="customer" type="text" style="width: 60%" class="i_autocomplit"  />
+			<%= hidden_field_tag :customer_id,"",id: 'customer_id_hidden' %>         
+		  </li>
+		  <div class="clear"></div>
+		  	<li>
+		  		<label>Facturado:</label>
+		  		<%= select_tag :invoice_state ,options_for_select(@invoice.getEstados),prompt: 'seleccionar'%>
+		  	</li>
+		  	<div class="clear"></div> 
+		  	
+		</ul>
+		</fieldset>
+	<div class="span-24 center last" >
+			<%= submit_tag 'Buscar'%>
+			<%= link_to 'Limpiar',invoices_path, class: 'limpiar button'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+	
+	$("input[class*=i_fecha]").datepicker({
+          altField: '#actualDate',
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'dd-mm-yy',
+          monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+                            'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+          dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+          gotoCurrent: true,
+          yearRange: '1900:2040'
+							  
+        });
+	// place holder para fechas
+        $("input[class*=i_fecha]").attr({
+          'placeholder':'(dd-mm-aaaa)...',
+          'size':'12',
+          'maxlength':'12'
+        });
+	
+    //Autocomplite de clientes
+	$(function() {
+		var list =[];
+		var i=0;
+		<% @customers.each do |c| %>
+		 	list[i]={
+		 		label: "<%= if c.customer_type_id == 2 then c.last_name + " " + c.name  else c.company_name end %>",
+		 		id: <%= c.id %>};
+			i=i+1;
+		<% end %>
+		//if el id del cliente es vacio se carga la lista para mostrar el autocomplete
+		$("#customer").autocomplete({
+			source: list,
+			select: function(event, ui) { 
+				$("#customer_id_hidden").val(ui.item.id); 
+			}
+		});
+	});
+	//Onfocus para que el cursor este sobre el input numero de retiro
+	$('#number_id').focus();
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+    var f2 = new LiveValidation('start_date', { validMessage: " ", wait: 500 });
+        f2.add( Validate.Presence, { failureMessage: "Ingrese fecha" } ); 
+    var f3 = new LiveValidation('end_date', { validMessage: " ", wait: 500 });
+        f3.add( Validate.Presence, { failureMessage: "Ingrese fecha" } );  
+</script>

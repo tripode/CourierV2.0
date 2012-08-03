@@ -1,12 +1,15 @@
 <div class="span-24 left">
 	<fieldset>
-		<legend>Facturacion</legend>
+		<legend>Facturación</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+		</div>
 		<fieldset>
 		<%= form_for(@invoice) do |f| %>
 		<ul>
 			<li>
 				<label>Factura Nro:</label>
-				<%= f.text_field :number, size: 15 %>
+				<%= f.text_field :number, size: 15, id:'invoice_number' %>
 			</li>
 			<li>
 				<label>Fecha:</label>
@@ -62,7 +65,21 @@
 			}
 		});
 	});
-	
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+     //Validaciones
+        var f1 = new LiveValidation('invoice_number', { validMessage: " ",wait: 100 });
+        f1.add( Validate.Presence, { failureMessage: " " } );
+        var f2 = new LiveValidation('date', { validMessage: " ",wait: 100 });
+        f2.add( Validate.Presence, { failureMessage: " " } );
+        var f3 = new LiveValidation('customer', { validMessage: " ",wait: 100 });
+        f3.add( Validate.Presence, { failureMessage: " " } );
+        var f4 = new LiveValidation('ruc_id', { validMessage: " ",wait: 100 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
+         var f4 = new LiveValidation('invoice_payment_method_id', { validMessage: " ",wait: 100 });
+        f4.add( Validate.Presence, { failureMessage: " " } );
 	
 </script>
   

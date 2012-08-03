@@ -1,0 +1,57 @@
+<div class="span-24 last">
+	<fieldset>
+		<legend>
+			Declaración de Cobro de Facturas
+		</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+		</div>
+		<%= form_tag({:action => 'change_invoice_state'})  do %>
+		<ul>
+		  <li>
+		    <label>Numero:</label>
+		    <%= text_field_tag :number,"",id: 'number_id', style: 'width: 30%', :maxlength => 30 %>
+		  </li>
+		  <li>
+		  		<label>Facturado:</label>
+		  		<%= select_tag :invoice_state ,options_for_select(@invoice.getEstados),prompt: 'seleccionar'%>
+		  </li>
+		</ul>
+		</fieldset>
+	<div class="span-24 center last" >
+			<%= submit_tag 'Declarar'%>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+	</div>
+	<% end %>
+</div>
+<script>
+	
+	$("input[class*=i_fecha]").datepicker({
+          altField: '#actualDate',
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'dd-mm-yy',
+          monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+                            'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+          dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+          gotoCurrent: true,
+          yearRange: '1900:2040'
+							  
+        });
+	// place holder para fechas
+        $("input[class*=i_fecha]").attr({
+          'placeholder':'(dd-mm-aaaa)...',
+          'size':'12',
+          'maxlength':'12'
+        });
+	
+	//Onfocus para que el cursor este sobre el input numero de retiro
+	$('#number_id').focus();
+	//Resetea el valor donde se muestra la noticia al hacer click en cualquier campo
+	 $("input").focus(function () {
+         $("#notice").val("");
+     });
+    var f1 = new LiveValidation('number_id', { validMessage: " ",onlyOnSubmit: true, wait: 500 });
+        f1.add( Validate.Presence, { failureMessage: "Ingrese  número" } ); 
+    
+</script>

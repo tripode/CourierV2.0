@@ -14,26 +14,20 @@
 	    <th>Destino</th>
 	    <th>Nota Retiro</th>
 	    <th>Sub Total</th>
-	    <th></th>
 	  </tr>
 	</thead>
         <tbody id="tbody-details">
-	<% $details.each do |detail| %>
+	<% @details.each do |detail| %>
 	  <tr>
-	  	<td><%= detail.date%></td>
-	  	<td><%= detail.service_type.description %></td>
-	  	<td><%= detail.amount %></td>
-	  	<td><%= detail.unit_price%></td>
-	  	<td><%= (detail.unit_price / 10) %></td>
-	  	<td><%= detail.product_type.description%></td>
-	  	<td><%= detail.city.name%></td>
-	  	<td><%= detail.number%> </td>
-	  	<td><%= (detail.unit_price * detail.amount) %></td>
-		<td>
-			<div>
-				<%= link_to image_tag('borrar2.gif'),delete_detail_invoice_path(id: detail.id), remote:true%>
-			</div>
-		</td>
+	  	<td><%= detail.retire_note.date%></td>
+	  	<td><%= detail.retire_note.service_type.description %></td>
+	  	<td><%= detail.retire_note.amount %></td>
+	  	<td><%= detail.retire_note.unit_price%></td>
+	  	<td><%= (detail.retire_note.unit_price / 10) %></td>
+	  	<td><%= detail.retire_note.product_type.description%></td>
+	  	<td><%= detail.retire_note.city.name%></td>
+	  	<td><%= detail.retire_note.number%> </td>
+	  	<td><%= detail.sub_total %></td>
 	  </tr>
 	<% end %>
 	</tbody>

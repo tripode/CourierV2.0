@@ -14,5 +14,5 @@ class ProductType < ActiveRecord::Base
   def self.get_list_product_types
     all.collect { |pt| [pt.description,pt.id]  }
   end
-
+  
 end

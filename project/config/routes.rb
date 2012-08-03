@@ -110,10 +110,24 @@ Project::Application.routes.draw do
   end
   
    resources :invoices do
+     member do
+      get 'delete_detail'
+    end
      collection do
        post 'add_detail'
        post 'getTotal'
        post 'getTotalIva10'
+       post 'search'
+       get 'declare_invoice'
+       post 'change_invoice_state'
+     end
+   end
+   
+   resources :product_types do
+     collection do
+       get 'new'
+       post 'create'
+       post 'delete'
      end
    end
   # The priority is based upon order of creation:

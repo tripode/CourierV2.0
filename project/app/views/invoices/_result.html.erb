@@ -1,0 +1,41 @@
+<table
+	columnClasses="center,center,center,center,center,center,center,center,center,center"
+	headerClass="center"
+	rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+	border="1" class="tablaIndex display"  bgcolor="white">
+	<thead>
+	  <tr>
+	  	<th>Numero</th>
+	    <th>Cliente</th>
+	    <th>Fecha</th>
+	    <th>Monto</th>
+	    <th>IVA 10%</th>
+	    <th>Forma Pago</th>
+	    <th>Facturado</th>
+	    <th></th>
+	    <th></th>
+	  </tr>
+	</thead>
+        <tbody id="tbody-details">
+	<% @invoices.each do |invoice| %>
+	  <tr>
+	  	<td><%= invoice.number%></td>
+	  	<td><%= invoice.customer.company_name + ' ' + invoice.customer.last_name + ' '  + invoice.customer.name%></td>
+	  	<td><%= invoice.date.strftime("%d-%m-%Y") %></td>
+	  	<td><%= invoice.total.to_i%></td>
+	  	<td><%= invoice.iva10.to_i %></td>
+	  	<td><%= invoice.payment_method.name_payment%></td>
+	  	<td><%= invoice.invoice_state%></td>
+	  	<td><div><%= link_to 'Mostrar',  invoice %></div></td>
+	  	<td>
+			<div>
+				<%= if invoice.invoice_state.downcase == "no" then link_to image_tag('borrar2.gif'),invoice, confirm: 'Estas seguro?', method: :delete, title: 'Eliminar Factura' end%>
+			</div>
+		</td>
+	  </tr>
+	<% end %>
+	</tbody>
+</table>
+<script>
+	
+</script>

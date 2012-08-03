@@ -1,45 +1,52 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Id:</b>
-  <%= @invoice.id %>
-</p>
-
-<p>
-  <b>Date:</b>
-  <%= @invoice.date %>
-</p>
-
-<p>
-  <b>Customer:</b>
-  <%= @invoice.customer_id %>
-</p>
-
-<p>
-  <b>Total:</b>
-  <%= @invoice.total %>
-</p>
-
-<p>
-  <b>Number:</b>
-  <%= @invoice.number %>
-</p>
-
-<p>
-  <b>Payment method:</b>
-  <%= @invoice.payment_method_id %>
-</p>
-
-<p>
-  <b>Iva5:</b>
-  <%= @invoice.iva5 %>
-</p>
-
-<p>
-  <b>Iva10:</b>
-  <%= @invoice.iva10 %>
-</p>
-
-
-<%= link_to 'Edit', edit_invoice_path(@invoice) %> |
-<%= link_to 'Back', invoices_path %>
+<div class="span-24 left">
+	<fieldset>
+		<legend>Visualizando Factura</legend>
+		<div id="form_notice"> 
+			<input id="notice" size="100" value="<%= notice %>" style="background:none; border:none; color: green; font-weight: bold" />
+		</div>
+		<fieldset>
+		
+		<ul>
+			<li>
+				<label>Factura Nro:</label>
+				<input type="text" value="<%= @invoice.number%>" size="15" disabled="true"  />
+			</li>
+			<li>
+				<label>Fecha:</label>
+				<input type="text" value="<%= @invoice.date.strftime("%d-%m-%Y") %>" size="15" disabled="true" />
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Cliente:</label>
+				<input type="text" disabled="true" style="width: 60%" value="<%=@invoice.customer.company_name + ' ' +@invoice.customer.last_name + ' ' + @invoice.customer.name %>"  />
+			</li>
+			<li>
+				<label>Ruc:</label>
+				<input type="text" id="ruc_id" size="13" value ="<%=@invoice.customer.ruc %>" disabled="true" />
+			</li>
+			<div class="clear"></div>
+			<li>
+				<label>Forma de Pago:</label>
+				 <input type="text" value="<%=@invoice.payment_method.name_payment %>" disabled="true"/>
+			</li>
+		</ul>
+		</fieldset>
+		<div class="span-24 center last" >
+			<%= link_to 'Ver para imprimir', invoice_path(@invoice, :format => "pdf"), class: 'button',id: 'save_button' , class: 'button' %>
+			<%= link_to 'Cancelar','../main_page/index' ,class: 'button'%>
+		</div>
+		<div id="add_detail_form">
+			<%= render 'show_detail'%>
+		</div>
+		<ul>
+		<li  style="width: 80%; alignment-adjust: center !important">
+			<label style="width: auto !important;">Total Iva 10% Gs.</label>
+			<input type="text" size="10" disabled="true" value="<%= @invoice.iva10.to_i %>" />
+			<label style="width: auto !important;">Total Gs:</label>
+			<input type="text" size="10" disabled="true" value="<%= @invoice.total.to_i %>" />
+		
+			
+		</li>
+	</ul>
+	</fieldset>
+</div>

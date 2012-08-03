@@ -1,37 +1,6 @@
-<h1>Listing invoices</h1>
-
-<table>
-  <tr>
-    <th>Id</th>
-    <th>Date</th>
-    <th>Customer</th>
-    <th>Total</th>
-    <th>Number</th>
-    <th>Payment method</th>
-    <th>Iva5</th>
-    <th>Iva10</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @invoices.each do |invoice| %>
-  <tr>
-    <td><%= invoice.id %></td>
-    <td><%= invoice.date %></td>
-    <td><%= invoice.customer_id %></td>
-    <td><%= invoice.total %></td>
-    <td><%= invoice.number %></td>
-    <td><%= invoice.payment_method_id %></td>
-    <td><%= invoice.iva5 %></td>
-    <td><%= invoice.iva10 %></td>
-    <td><%= link_to 'Show', invoice %></td>
-    <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
-    <td><%= link_to 'Destroy', invoice, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Invoice', new_invoice_path %>
+<div id="form_search_invoice">
+	<%=render 'search'%>
+</div>
+<div id="form_result">
+	<%=render 'result'%>
+</div>

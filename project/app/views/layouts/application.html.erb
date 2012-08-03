@@ -127,6 +127,9 @@
                     <% if can? :manage, Employee %>
                        <li><%= link_to 'Funcionario', new_employee_path %></li>
                     <% end %>
+                    <% if can? :manage, ProductType %>
+                       <li><%= link_to 'Tipo de Producto', new_product_type_path %></li>
+                    <% end %>
                     <% if can? :manage, Area %>
                       <li><%= link_to 'Zonas', new_area_path %></li>
                     <% end %>
@@ -191,11 +194,13 @@
                 </li>
               <% end %>
               <% if can? :manage, Invoice %>
-                <li><a href="#">Administracion</a>
-                  <ul>
-                    <li><%= link_to "Facturacion", new_invoice_path %></li>
-                  </ul>
-                </li>
+              	<li><a href="#">Facturacion</a>
+                      <ul>
+                        <li><%= link_to "Crear Factura", new_invoice_path %></li>
+                        <li><%= link_to 'Buscar Factura', invoices_path %></li>
+                        <li><%= link_to 'Declarar cobro de Factura', declare_invoice_invoices_path %></li>
+                      </ul>
+                 </li>
               <% end %>
               <% if can? :manage, User %>
                 <li><a href="#">Perfil</a>
