@@ -4,7 +4,7 @@
 
 
 <div class="span-24">
-  <div class="span-7">
+  <div class="span-6 append-1">
     <%= image_tag ("courier.jpg") %>
   </div>
   <div class="span-17 last">
@@ -15,6 +15,7 @@
         <input id="<%= "ac-#{i}" %>" name="accordion-1" type="radio" checked />
         <label for="<%= "ac-#{i}" %>" ><%=help  %></label>
         <article class="ac-large">
+           <%= image_tag "help/help#{i+1}.png", :width => '670x600' %>
           <p><%= @link_helps[i] %></p>
         </article>
       </div>

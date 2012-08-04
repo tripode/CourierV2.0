@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class RegistrationsController < Devise::RegistrationsController
  #
   # Antes de hacer cualquier cosa con este controler,
@@ -49,11 +51,11 @@ class RegistrationsController < Devise::RegistrationsController
     build_resource
     resource.employee_id = params[:employee_id]
     if !user and !user2 and resource.save
-      logger.info("Usuario creado: #{resource.username}, #{Time.now}")
+      CustomLogger.info("Usuario creado: #{resource.username}, #{Time.now}")
       @message = {:success => "El nuevo usuario fue creado exitosamente"}
       redirect_to new_user_registration_path(:messages => @message)
     else
-      logger.error("No se pudo crear el usuario #{resource.username}, #{Time.now}")
+      CustomLogger.error("No se pudo crear el usuario #{resource.username}, #{Time.now}")
       redirect_to new_user_registration_path(:messages => {:error => 'No se pudo guardar el usuario'})
     end
   end
@@ -69,17 +71,15 @@ class RegistrationsController < Devise::RegistrationsController
   # This action controller delete a user.
   #
   def delete_user
-    Rails.logger = Logger.new(STDOUT)
-    puts params.to_yaml
-    logger.info params.to_yaml
+   
     if(current_user.id.to_s != params[:id].to_s and params[:id].to_s!=1.to_s)
       @deleted_user = User.find(params[:id])
       begin
         @deleted_user.destroy
         @messages = {:success => "El usuario fue eliminado exitosamente"}
-        logger.info("#{@deleted_user.inspect} fue borrado por #{current_user.inspect}, #{Time.now}")
+        CustomLogger.info("#{@deleted_user.inspect} fue borrado por #{current_user.inspect}, #{Time.now}")
       rescue Exception => e
-        logger.error("Error al intentar borrar el usuario #{@deleted_user.inspect}. Excepcion: #{e}, #{Time.now}")
+        CustomLogger.error("Error al intentar borrar el usuario #{@deleted_user.inspect}. Excepcion: #{e}, #{Time.now}")
         @messages = {:error => "Hubo un error al intentar eliminar el usuario"}
       end
     else

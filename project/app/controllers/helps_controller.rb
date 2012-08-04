@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class HelpsController < ApplicationController
   
   def index
@@ -21,13 +23,13 @@ class HelpsController < ApplicationController
       "Como Crear manifiesto de carga?","Listar manifiesto de carga"
     ]
     @link_helps=[
-      "Vaya al menu de arriba, luego Administracion y luego click en usuarios, Necesita permiso de administrador para crear usuarios",
-      "Vaya al menu, esquina derecha superior click un icono con forma de tuerca. Podra editar su password y cambiar su nombre de usuario",
-      "Vaya al menu, esquina superior derecha click en el icono que tiene una flecha apuntando a la derecha con un semi cuadrado envolviendolo",
-      "Vaya al menu, Registro varios, luego click en Zonas, En ese mismo lugar podra Crear nuevas Areas/zonas ",
-      "Vaya al menu, Registro varios, luego click en Ciudades, Podra asignar una ciudad/pueblo/distrito a un departamento del pais (Paraguay)",
-      "Vaya al menu, Registro Varios, luego Clientes, click en Clientes por Persona, alli podra crear borrar o editar un clinte de tipo persona (persona fisica)",
-      "Vaya al menu, Registro Varios, luego Clientes, click en Clientes por Empresa, alli podra crear borrar o editar un clinte de tipo Empresa (persona juridica)",
+      "Ingrese al menu Administracion, luego en usuarios, rellene los campos obligatorios (seleccione un funcionario; rellene los campos usuario, email, contrasena, confirmar contrasena; seleccione uno o mas roles), haz click en guardar. Obs.: Necesita permiso de administrador para crear usuarios",
+      "Haz click en el icono con forma de tuerca en la esquina superior derecha. Modifique los datos que quieras cambiar (edite los campos usuario y email), para cambiar contrasena rellene todos los campos a la derecha (contrasena actual, nueva contrasena, repetir nueva contrasena) luego haz click en guardar.",
+      "Haz click en el icono que tiene una flecha apuntando a una puerta en la esquina superior derecha.",
+      "Ingrese al menu Registro varios, luego en Zonas, rellene el campo nombre, seleccione la ciudad, rellene el campo descripcion (opcional), haz click en guardar.",
+      "Ingrese al menu Registro Varios, luego en Ciudades, rellene el campo nombre, seleccione el departamento (el pais se llenara automaticamente), haz click en guardar.",
+      "Ingrese al menu Registro Varios, luego en Clientes, luego en Clientes por Persona, alli podra crear borrar o editar un clinte de tipo persona (persona fisica)",
+      "Ingrse al menu Registro Varios, luego Clientes, luego en Clientes por Empresa, alli podra crear borrar o editar un clinte de tipo Empresa (persona juridica)",
       "Vaya al menu, Registro Varios, luego click en Destinatarios, aqui podras crear, editar  y borrar posibles destinatarios de paquetes, ademas de poder asignar varias direcciones a un mismo destinatario",
       "Vaya al menu, Registro Varios, y click en Funcionario, Aqui podras crear, editar y borrar todos tus posibles empleados, necestas tener permisos de Administrador para poder hacerlo",
       "Vaya al menu, Notas, luego click Notas de Retiro, Crear Nota de Retiro, aqui tendras que ingresar todos los datos que corresponden a Una nota de Retiro, podras editar , crear y borrar Notas de Retiro, tambine necesitas permisos especiales para manipular notas de retiro",

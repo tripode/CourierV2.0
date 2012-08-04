@@ -1,9 +1,11 @@
+require 'custom_logger'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
   #Para tener acceso a cualquier metodo en el controller 
   # debe haber un user loggeado.
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :log
   
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = "No tienes permisos para acceder a esta pagina."
@@ -33,6 +35,19 @@ class ApplicationController < ActionController::Base
   #
   def after_sign_out_path_for(resource_or_scope)
     new_user_session_path
+  end
+  
+  ##
+  # Log de cada action que se llama
+  #
+  def log
+    begin
+      if (user_signed_in?)
+        CustomLogger.info("Usuario: #{current_user.email}, Empleado: #{current_user.employee.full_name}, Controller: #{params[:controller]}, Accion: #{params[:action]}")
+      else
+        CustomLogger.info("Controller: #{params[:controller]}, Action: #{params[:action]}")
+      end
+    end
   end
   
 end

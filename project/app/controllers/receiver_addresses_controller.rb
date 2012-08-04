@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class ReceiverAddressesController < ApplicationController
   # GET /receiver_addresses
   # GET /receiver_addresses.json

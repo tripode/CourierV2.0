@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class RoutingSheetsController < ApplicationController
   
   #
@@ -147,7 +149,7 @@ class RoutingSheetsController < ApplicationController
           format.html { redirect_to @routing_sheet, notice: 'La Hoja de Ruta se guardo con exito.' }
           format.json { render json: @routing_sheet, status: :created, location: @routing_sheet }
         rescue
-          logger.error("No se pudo guardar la hoja de ruta: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
+          CustomLogger.error("No se pudo guardar la hoja de ruta: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
           format.html { redirect_to new_routing_sheet_path, notice: 'No se pudo guardar la hoja de ruta..' }
           format.json { head :no_content }
         end
@@ -163,7 +165,7 @@ class RoutingSheetsController < ApplicationController
 
     respond_to do |format|
       if $products.empty?
-        logger.error("No se pudo actualizar la hoja de ruta sin productos: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
+        CustomLogger.error("No se pudo actualizar la hoja de ruta sin productos: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to edit_routing_sheet_path, notice: 'Prohibido actualizar sin productos..' }
         format.json { head :no_content }
       else
@@ -200,7 +202,7 @@ class RoutingSheetsController < ApplicationController
             format.json { head :no_content }
           end
         rescue
-          logger.error("No se pudo actualizar la hoja de ruta: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
+          CustomLogger.error("No se pudo actualizar la hoja de ruta: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
           format.html { redirect_to @routing_sheet, notice: 'La Hoja de Ruta no se pudo actualizar.' }
           format.json { head :no_content }
         end
@@ -235,12 +237,12 @@ class RoutingSheetsController < ApplicationController
               format.json { head :no_content }
             end
           rescue
-           logger.error("No se pudo eliminar la hoja de ruta. Puede estar siendo utilizada.: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
+           CustomLogger.error("No se pudo eliminar la hoja de ruta. Puede estar siendo utilizada.: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
            format.html { redirect_to routing_sheets_url, notice: 'Error al intentar eliminar esta hoja de ruta. Puede estar siendo utilizada.' }
            format.json { head :no_content }
           end
       else
-           logger.error("No se puede eliminar la hoja de ruta. Esta siendo utilizada.: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
+           CustomLogger.error("No se puede eliminar la hoja de ruta. Esta siendo utilizada.: #{@routing_sheet.inspect}, usuario: #{current_user.username}, #{Time.now}")
            format.html { redirect_to routing_sheets_url, notice: 'No se puede eliminar porque ya ha sido procesada.' }
            format.json { head :no_content }
       end

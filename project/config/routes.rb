@@ -1,6 +1,7 @@
 Project::Application.routes.draw do
   
- 
+ get "audits/index"
+ post "audits/index"
 
   resources :helps
   #resources :receiver_addresses

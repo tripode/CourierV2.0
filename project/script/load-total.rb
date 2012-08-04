@@ -34,19 +34,6 @@ Employee.transaction do
         :function_type_id=>1
      )
     Employee.create(
-        :email=>"setwildo31@gmail.com",
-        :name=>"Wildo",
-        :last_name =>"Monges",
-        :num_identity => 3539120,
-        :address=>"Barrio Kennedy",
-        :admission_date=>date,
-        :birthday=>date,
-        :salary=>0,
-        :mobile_number=>"(0985)163420",
-        :phone_number=>"(071)207865",
-        :function_type_id=>1
-     )
-    Employee.create(
         :email=>"diego.courier@gmail.com",
         :name=>"Diego",
         :last_name =>"Silvero",
@@ -98,8 +85,14 @@ ProductType.transaction do
     ProductType.create(:description=>"Extracto de Cuenta Corriente")
     ProductType.create(:description=>"Tarjeta de Credito/Debito")
     ProductType.create(:description=>"Documentos Varios")
+    ProductType.create(:description=>"Revistas")
+    ProductType.create(:description=>"Promociones")
+    ProductType.create(:description=>"Telegramas")
+    ProductType.create(:description=>"Colacionados")
+    ProductType.create(:description=>"Tarjetas de Credito con Pin")
 
 end
+
 Reason.transaction do
     
 #    Reason.create(:description=>"Se mudó")
@@ -215,22 +208,16 @@ end
 User.transaction do
     ## User por defecto para entrar al sistema
     User.create(:username     => 'tripodevs',
-                :email        => 'tripodevs@googletroups.com',
+                :email        => 'tripodevs@googlegroups.com',
                 :password     => 'tripodevs',
                 :employee_id  => 1,
-                :role_ids     => Role.where(:name => 'Administrador').first.id
-               )
-    User.create(:username     => 'admin',
-                :email        => 'admin@admin.com',
-                :password     => 'pass',
-                :employee_id  => 2,
                 :role_ids     => Role.where(:name => 'Administrador').first.id
                )
     ## User de el dueno de la empresa Diego Silvero
     User.create(:username     => 'diego',
                 :email        => 'diego.courier@gmail.com',
                 :password     => 'pass',
-                :employee_id  => 3,
+                :employee_id  => 2,
                 :role_ids     => Role.where(:name => 'Administrador').first.id
                )
 end

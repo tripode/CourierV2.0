@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class CustomerCompaniesController < ApplicationController
   
   #
@@ -69,10 +71,10 @@ class CustomerCompaniesController < ApplicationController
       begin 
          @customer_company.save
          @notice="El cliente se registro correctamente."
-         logger.info("Se crea una empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
+         CustomLogger.info("Se crea una empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
       rescue
          @notice="No se pudo registrar el cliente."
-         logger.error("Error al crear una empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
+         CustomLogger.error("Error al crear una empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
       ensure
         format.html { redirect_to new_customer_company_path, notice: @notice }
         format.json { head :no_content } 
@@ -88,10 +90,10 @@ class CustomerCompaniesController < ApplicationController
       begin 
         @customer_company.update_attributes(params[:customer])
          @notice="El cliente se actualizo correctamente."
-         logger.info("Se actualiza empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
+         CustomLogger.info("Se actualiza empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
       rescue
          @notice="No se pudo actualizar el cliente."
-         logger.error("Error al actualizar empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
+         CustomLogger.error("Error al actualizar empresa cliente: #{@customer_company.inspect}, usuario: #{current_user.username}, #{Time.now}")
       ensure
         format.html { redirect_to new_customer_company_path, notice: @notice }
         format.json { head :no_content } 
@@ -109,10 +111,10 @@ class CustomerCompaniesController < ApplicationController
       begin
         @customer_company.destroy
         @notice="El cliente ha sido eliminado."
-        logger.info("Se elimina cliente empresa: #{@customer_company}, usuario: #{current_user.username}, #{Time.now}")
+        CustomLogger.info("Se elimina cliente empresa: #{@customer_company}, usuario: #{current_user.username}, #{Time.now}")
       rescue
         @notice="Este cliente no puede ser eliminado."
-        logger.error("Error al eliminar cliente empresa: #{@customer_company}, usuario: #{current_user.username}, #{Time.now}")
+        CustomLogger.error("Error al eliminar cliente empresa: #{@customer_company}, usuario: #{current_user.username}, #{Time.now}")
       ensure
         format.html { redirect_to new_customer_company_path,notice: @notice }
         format.json { head :no_content }

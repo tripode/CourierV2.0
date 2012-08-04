@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class CitiesController < ApplicationController
  #
   # Antes de hacer cualquier cosa con este controler,
@@ -40,10 +42,10 @@ class CitiesController < ApplicationController
       begin 
          @city.save
          @notice="La ciudad se registro correctamente."
-         logger.info("Se crea la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+         CustomLogger.info("Se crea la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
       rescue Exception => e
          @notice="No se pudo registrar la ciudad."
-         logger.error("Error al crear la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, excepcion: #{e.inspect}, #{Time.now}")
+         CustomLogger.error("Error al crear la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, excepcion: #{e.inspect}, #{Time.now}")
       ensure
         format.html { redirect_to new_city_path, notice: @notice }
         format.json { head :no_content } 
@@ -61,10 +63,10 @@ class CitiesController < ApplicationController
      begin
        @city.destroy
        @notice="La ciudad ha sido eliminada"
-       logger.info("Se borra la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+       CustomLogger.info("Se borra la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
      rescue Exception => e
        @notice="Esta ciudad no puede ser eliminada"
-       logger.error("Error al borrar la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+       CustomLogger.error("Error al borrar la ciudad: #{@city.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
      ensure
        format.html { redirect_to new_city_path, notice: @notice }
        format.json { head :no_content } 

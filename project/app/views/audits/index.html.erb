@@ -1,0 +1,95 @@
+<div class="span-24">
+  <% if @messages %>
+    <% @messages.each do |key, value| %>
+      <div class=<%= key %> >
+        <%= value %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<div class="span-24 last">
+  <fieldset>
+    <legend>
+      Log de Auditoria
+    </legend>
+    <%= form_tag :action => 'index', :controller => 'audits', :method => :post do%>
+      <div class="span-5">
+        <ul class="field-list">
+          <div>
+            <li>
+              <%= label_tag :from, 'From', :class => 'large-label'%>
+              <%= text_field_tag :from, '', id: :from, :size => '20'%>
+            </li>			
+          </div>
+        </ul>
+      </div>
+      <div class="span-5">
+        <ul class="field-list">
+          <div>
+            <li>
+              <%= label_tag :to, "To", :class => 'large-label'%>
+              <%= text_field_tag :to, '', id: :to, :size => '20'%>
+            </li>	
+          </div>
+        </ul>
+      </div>
+      <div class="span-5" style="padding-bottom: 15px;">
+        <%= submit_tag 'search', style: 'margin-top: 15px;' %>
+      </div>
+    <% end %>
+  </fieldset>
+</div>
+<div class="span-24">
+  <table
+    columnClasses="center,center,center,center,center,center,center,center,center,center"
+    headerClass="center"
+    rowClasses="odd gradeC" cellpadding="0" cellspacing="0"
+    border="1" class="tablaIndex display"  bgcolor="white">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Nivel</th>
+        <th>Log</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @objects.each do |array| %>
+        <tr class="field">
+          <td>  <%= array[1] %>         </td>
+          <td>  <%= array[2] %>         </td>
+          <td>  <%= array[3] %>  </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+	
+	
+	
+	
+  $(document).ready(function(){
+    $("input#from,input#to").datepicker({
+      altField: $(this).attr("id"),
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd-mm-yy',
+      monthNamesShort: ['Ene','Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul',
+        'Ago', 'Set', 'Oct', 'Nov', 'Dic'],
+      dayNamesMin: ['Do', 'Lu', 'Ma', 'Mie', 'Ju', 'Vie', 'Sa'],
+      gotoCurrent: true,
+      yearRange: '1900:2040'
+
+    });
+    // place holder para fechas
+    $("input#from,input#to").attr({
+      'placeholder':'(dd-mm-aaaa)...',
+      'size':'12',
+      'maxlength':'12'
+    });
+  });
+	
+  
+	
+</script>

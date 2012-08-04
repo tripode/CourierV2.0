@@ -1,5 +1,4 @@
 .ac-container{
-	width: 400px;
 	margin: 10px auto 30px auto;
 	text-align: left;
 }
@@ -92,5 +91,5 @@
 	height: 180px;
 }
 .ac-container input:checked ~ article.ac-large{
-	height: 230px;
+	height: auto;
 }

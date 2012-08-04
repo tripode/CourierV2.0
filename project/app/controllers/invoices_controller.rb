@@ -1,3 +1,5 @@
+require 'custom_logger'
+
 class InvoicesController < ApplicationController
    #
   # Antes de hacer cualquier cosa con este controler,

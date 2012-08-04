@@ -209,6 +209,13 @@
                   </ul>
                 </li>
               <% end %>
+              <% if can? :manage, User %>
+                <li><a href="#">Auditoria</a>
+                  <ul>
+                    <li><%= link_to "Logs", audits_index_path %></li>
+                  </ul>
+                </li>
+              <% end %>
             </ul>
           </div>
           <div class='current-user'>
