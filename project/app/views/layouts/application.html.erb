@@ -209,7 +209,7 @@
                   </ul>
                 </li>
               <% end %>
-              <% if can? :manage, User %>
+              <% if current_user.has_role("Administrador") %>
                 <li><a href="#">Auditoria</a>
                   <ul>
                     <li><%= link_to "Logs", audits_index_path %></li>
