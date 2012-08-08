@@ -35,7 +35,7 @@ class AuditsController < ApplicationController
     end
       
     @messages = {}
-    @messages[:success]="Search from: #{Date::MONTHNAMES[@from.month]} #{@from.day}, #{@from.year} to: #{Date::MONTHNAMES[@to.month]} #{@to.day}, #{@to.year}"
+    @messages[:success]="Busqueda desde: #{@from.strftime("%Y-%m-%d")} hasta: #{@to.strftime("%Y-%m-%d")}"
   end
   
 end

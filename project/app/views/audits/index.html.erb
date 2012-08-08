@@ -17,7 +17,7 @@
         <ul class="field-list">
           <div>
             <li>
-              <%= label_tag :from, 'From', :class => 'large-label'%>
+              <%= label_tag :from, 'Desde', :class => 'large-label'%>
               <%= text_field_tag :from, '', id: :from, :size => '20'%>
             </li>			
           </div>
@@ -27,14 +27,14 @@
         <ul class="field-list">
           <div>
             <li>
-              <%= label_tag :to, "To", :class => 'large-label'%>
+              <%= label_tag :to, "Hasta", :class => 'large-label'%>
               <%= text_field_tag :to, '', id: :to, :size => '20'%>
             </li>	
           </div>
         </ul>
       </div>
       <div class="span-5" style="padding-bottom: 15px;">
-        <%= submit_tag 'search', style: 'margin-top: 15px;' %>
+        <%= submit_tag 'Buscar', style: 'margin-top: 15px;' %>
       </div>
     <% end %>
   </fieldset>
@@ -55,7 +55,7 @@
     <tbody>
       <% @objects.each do |array| %>
         <tr class="field">
-          <td>  <%= array[1] %>         </td>
+          <td style="width: 80px">  <%= Time.parse(array[1]).strftime("%Y-%m-%d %H:%M:%S") %>         </td>
           <td>  <%= array[2] %>         </td>
           <td>  <%= array[3] %>  </td>
         </tr>
