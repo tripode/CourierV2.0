@@ -425,14 +425,18 @@ class ProductsController < ApplicationController
       if params[:commit]=="Descargar Excel"
          respond_to do |format|
             format.csv do
-              create_date=Date.today
-              create_date.strftime("%d-%m-%Y") if create_date
-              csv_report = DeliveryReportCsv.new(@product_type,@customer,@employee,@details,@file_path,getMonth(Date.parse(@report_date).month),Date.parse(@report_date).year)
-              csv_string = csv_report.getCSV
-                # envia al browser
-              send_data csv_string, 
-                        :type => 'text/csv; charset=iso-8859-1; header=present', 
-                        :disposition => "attachment; filename=informe_#{@customer.company_name + @customer.last_name + @customer.name + "_" + create_date.to_s}.csv" 
+              begin
+                create_date=Date.today
+                create_date.strftime("%d-%m-%Y") if create_date
+                csv_report = DeliveryReportCsv.new(@product_type,@customer,@employee,@details,@file_path,getMonth(Date.parse(@report_date).month),Date.parse(@report_date).year)
+                csv_string = csv_report.getCSV
+                  # envia al browser
+                send_data csv_string, 
+                          :type => 'text/csv; charset=iso-8859-1; header=present', 
+                          :disposition => "attachment; filename=informe_#{@customer.company_name + @customer.last_name + @customer.name + "_" + create_date.to_s}.csv" 
+              rescue
+                CustomLogger.error("Error al crear csv: #{csv_report.inspect}, usuario: #{current_user.username}, #{Time.now}")
+              end
             end
          end
       else  if params[:commit]=="Generar PDF"
@@ -447,7 +451,7 @@ class ProductsController < ApplicationController
                   pdf.render_file(@file_path)
                 rescue
                   #no se guardo el archivo
-                  CustomLogger.info("Error al crear pdf: #{pdf.inspect}, usuario: #{current_user.username}, #{Time.now}")
+                  CustomLogger.error("Error al crear pdf: #{pdf.inspect}, usuario: #{current_user.username}, #{Time.now}")
                 end
                 pdf.move_cursor_to 40
                 pdf.text("<u><a href='#{root_url}products/send_email?customer_id=#{@customer.id}&file_path=#{@file_path}&report_date=#{@report_date}' method='post'>Enviar</a></u>   <u><link href='#{delivery_report_products_url}'>Nuevo reporte</link></u>  <u><link href='#{root_url}main_page/index'>Cancelar</link></u> ",:inline_format => true, :page_number => "1")

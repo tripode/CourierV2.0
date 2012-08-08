@@ -107,7 +107,7 @@ class CargoManifestsController < ApplicationController
         @cargo_manifest.origin_city_id=@@origin
         @cargo_manifest.destiny_city_id=@@destiny
         @cargo_manifest.save
-        CustomLogger.info("Se creo manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+        CustomLogger.info("Se creo manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.username}, #{Time.now}")
         #se cree el detalle
         cargo_manifest_details= params[:transport_guides_list]
         unless(cargo_manifest_details.nil?)
@@ -133,6 +133,7 @@ class CargoManifestsController < ApplicationController
            
             rescue
               #no se guardo el archivo
+               CustomLogger.error("Se se guardo el manifiesto de carga: usuario: #{current_user.username}, #{Time.now}")
             end
             send_data pdf.render, filename: "manifiesto_carga_#{cargo_manifest.manifest_num}_#{create_date}.pdf",
              type: "application/pdf",
@@ -142,10 +143,10 @@ class CargoManifestsController < ApplicationController
           end
         end
     rescue ActiveRecord::StatementInvalid
-      CustomLogger.error("Error al crear manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+      CustomLogger.error("Error al crear manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.username}, #{Time.now}")
       manejo_error_pg(@cargo_manifest)
     rescue
-      CustomLogger.error("Error al crear manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+      CustomLogger.error("Error al crear manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.username}, #{Time.now}")
       respond_to do |format|
         format.html { redirect_to new_cargo_manifest_path,notice: "Error al guardar!"}
         format.json { render json: @cargo_manifest.errors, status: :unprocessable_entity }
@@ -189,7 +190,7 @@ class CargoManifestsController < ApplicationController
       end
 
     rescue ActiveRecord::StatementInvalid
-      CustomLogger.error("Error al actualizar manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+      CustomLogger.error("Error al actualizar manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.username}, #{Time.now}")
       manejo_error_pg(@cargo_manifest)
 
     rescue
@@ -215,7 +216,7 @@ class CargoManifestsController < ApplicationController
         detail.delete
       end
       @cargo_manifest.delete
-      CustomLogger.info("Se borra manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.inspect}, #{Time.now}")
+      CustomLogger.info("Se borra manifiesto de carga: #{@cargo_manifest.inspect}, usuario: #{current_user.username}, #{Time.now}")
     end
     
 

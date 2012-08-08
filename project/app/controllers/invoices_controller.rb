@@ -70,22 +70,27 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       result = @invoice.save_invoice(@invoice,$details)
       if result.to_i == 0
+        CustomLogger.info("Se guardo una factura: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to @invoice, notice: 'La factura se guardo correctamente.' }
         format.json {  head :no_content }
       end
       if result.to_i == 1
+        CustomLogger.info("No se puedo guardar la factura, el numero ingresado no es valido: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_invoice_path, notice: 'No se pudo guardar la factura, el numero de factura ingresado no es valido' }
         format.json { head :no_content }
       end
       if result.to_i == 2
+         CustomLogger.info("No se guardo la factura. El numero ingresado ya existe: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_invoice_path, notice: 'No se pudo guardar la factura, el numero de factura ingresado ya existe' }
         format.json { head :no_content }
       end
       if result.to_i == 3
+         CustomLogger.info("No se puede guardar una factura sin detalles: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_invoice_path, notice: 'No se puede guardar una factura sin detalles. Por favor ingrese algun detalle' }
         format.json { head :no_content }
       end
       if result.to_i == 4
+         CustomLogger.error("Error al intentar guardar una factura: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_invoice_path, notice: 'Error al intentar guardar la factura, por favor vuelva a intentar guardar' }
         format.json { head :no_content }
       end
@@ -115,19 +120,23 @@ class InvoicesController < ApplicationController
 
     respond_to do |format|
       if @invoice.nil?
+         CustomLogger.info("No existe la facura a eliminar de la base de datos: usuario: #{current_user.username}, #{Time.now}")
          format.html { redirect_to invoices_url, notice: "No existe esta factura." }
          format.json { head :no_content }  
       end
       result = @invoice.delete_invoice(@invoice)
       if result.to_i == 0
+         CustomLogger.info("Factura eliminada correctamente: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to invoices_url, notice: "La factura ha sido eliminada correctamente." }
         format.json { head :no_content }  
       end
       if result.to_i == 1
+         CustomLogger.info("No se puede eliminar la factura porque ya ha sido cobrada: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to invoices_url, notice: "La factura no puede ser eliminada porque ya ha sido cobrada." }
         format.json { head :no_content }
       end
       if result.to_i == 2
+         CustomLogger.info("La factura no puede ser eliminada porque ha sido procesada: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to invoices_url, notice: "Esta factura no puede ser eliminada, ya ha sido procesada" }
         format.json { head :no_content }
       end
@@ -225,6 +234,7 @@ class InvoicesController < ApplicationController
       end
     rescue
       @invoices = Array.new
+       CustomLogger.error("Error al buscar facturas usuario: #{current_user.username}, #{Time.now}")
       flash[:notice]="Error al buscar facturas."
     end
     
@@ -251,24 +261,29 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       result = @invoice.change_state(invoice_number,new_invoice_state)
       if result.to_i == 0
+        CustomLogger.info("Actualizacion de factura: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to declare_invoice_invoices_path, notice: 'El estado de la factura ha sido actualizado.' }
         format.json {  head :no_content }
         
       end
       if result.to_i == 1
+        CustomLogger.info("No se actualizo la factura. El numero ingresado no es correcto: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to declare_invoice_invoices_path, notice: 'No se pudo actualizar el estado de la factura. El numero ingresado no es correcto' }
         format.json { head :no_content }
       end
       if result.to_i == 2
+         CustomLogger.info("No se actualizo la factura. El existe el estado ingresado: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to declare_invoice_invoices_path, notice: 'No se pudo actualizar el estado de la factura. No existe el estado ingresado' }
         format.json { head :no_content }
       end
       if result.to_i == 3
+         CustomLogger.info("No existe factura con el numero ingresado: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to declare_invoice_invoices_path, notice: 'No existe factura con el numero ingresado, por favor verifique el numero ingresado' }
         format.json { head :no_content }
         
       end
       if result.to_i == 4
+         CustomLogger.error("Error al intentar actualizar la factura: #{@invoice.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to declare_invoice_invoices_path, notice: 'Error al intentar actualizar la factura, por favor vuelva a intentar en unos minutos' }
         format.json { head :no_content }
       end

@@ -41,13 +41,16 @@ class ProductTypesController < ApplicationController
     respond_to do |format|
       begin
       if @product_type.destroy
+         CustomLogger.info("Se elimino el tipo de producto: #{@product_type.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_product_type_path, notice: 'Se elimino el tipo de producto.' }
         format.json {  head :no_content }
       else
+         CustomLogger.info("Este tipo de producto no puede ser eliminado: #{@product_type.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_product_type_path, notice: 'Este tipo de producto no puede ser eliminado' }
         format.json {  head :no_content }
       end
       rescue
+         CustomLogger.error("Este tipo de producto no puede ser eliminado: #{@product_type.inspect}, usuario: #{current_user.username}, #{Time.now}")
         format.html { redirect_to new_product_type_path, notice: 'Este tipo de producto no puede ser eliminado' }
         format.json {  head :no_content }
       end

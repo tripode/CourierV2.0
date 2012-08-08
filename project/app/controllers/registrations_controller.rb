@@ -77,9 +77,9 @@ class RegistrationsController < Devise::RegistrationsController
       begin
         @deleted_user.destroy
         @messages = {:success => "El usuario fue eliminado exitosamente"}
-        CustomLogger.info("#{@deleted_user.inspect} fue borrado por #{current_user.inspect}, #{Time.now}")
+        CustomLogger.info("#{@deleted_user.inspect} fue borrado por #{current_user.username}, #{Time.now}")
       rescue Exception => e
-        CustomLogger.error("Error al intentar borrar el usuario #{@deleted_user.inspect}. Excepcion: #{e}, #{Time.now}")
+        CustomLogger.error("Error al intentar borrar el usuario #{@deleted_user.username}. Excepcion: #{e}, #{Time.now}")
         @messages = {:error => "Hubo un error al intentar eliminar el usuario"}
       end
     else
