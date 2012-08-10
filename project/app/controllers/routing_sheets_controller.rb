@@ -66,21 +66,17 @@ class RoutingSheetsController < ApplicationController
     $products= Array.new
     @area= Area.new
     $total=0;
-    @start_value=ActiveRecord::Base.connection.execute("select start_value from routing_sheets_id_seq").first["start_value"]
-    $number=ActiveRecord::Base.connection.execute("select last_value from routing_sheets_id_seq").first["last_value"]
-    #La primera ves que se registra una hoja de ruta se setea como numero 1
-    if(@start_value.to_i == $number.to_i) 
-      @first=RoutingSheet.first
-
-      if(!@first.nil?) 
-        $number= 2
-      else
-        $number= 1
-      end
-      @routing_sheet.number= $number.to_i #
+    #@start_value=ActiveRecord::Base.connection.execute("select start_value from routing_sheets_id_seq").first["start_value"]
+    #$number=ActiveRecord::Base.connection.execute("select last_value from routing_sheets_id_seq").first["last_value"]
+    last_sheet = RoutingSheet.find(:last)
+    $number = 0
+    if last_sheet.nil?
+      $number = 0
     else
-      @routing_sheet.number=$number.to_i + 1
+      $number = last_sheet.number
     end
+    #La primera ves que se registra una hoja de ruta se setea como numero 1
+    @routing_sheet.number=$number.to_i + 1
     
     respond_to do |format|
       format.html # new.html.erb
@@ -113,21 +109,18 @@ class RoutingSheetsController < ApplicationController
     @routing_sheet.employee_id=current_user.employee.id #Seteo el user logueado
     @routing_sheet.routing_sheet_state_id = 1 ## Por defecto el estado es "En Proceso", id: 1
     @routing_sheet.total_amount=$total
-    @start_value=ActiveRecord::Base.connection.execute("select start_value from routing_sheets_id_seq").first["start_value"]
-    $number=ActiveRecord::Base.connection.execute("select last_value from routing_sheets_id_seq").first["last_value"]
+    #@start_value=ActiveRecord::Base.connection.execute("select start_value from routing_sheets_id_seq").first["start_value"]
+    #$number=ActiveRecord::Base.connection.execute("select last_value from routing_sheets_id_seq").first["last_value"]
     #La primera ves que se registra una hoja de ruta se setea como numero 1
-    if(@start_value.to_i==$number.to_i) 
-      @first=RoutingSheet.first
-      if(!@first.nil?) 
-        $number= 2
-      else
-        $number= 1
-      end
-     
-      @routing_sheet.number= $number.to_i #
+    last_sheet = RoutingSheet.find(:last)
+    $number = 0
+    if last_sheet.nil?
+      $number = 0
     else
-      @routing_sheet.number=$number.to_i + 1
+      $number = last_sheet.number
     end
+    #La primera ves que se registra una hoja de ruta se setea como numero 1
+    @routing_sheet.number=$number.to_i + 1
     respond_to do |format|
       if $products.empty?
           format.html { redirect_to new_routing_sheet_path, notice: 'Prohibido guardar sin agregar algun producto..' }
