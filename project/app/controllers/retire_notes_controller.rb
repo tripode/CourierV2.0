@@ -242,7 +242,7 @@ class RetireNotesController < ApplicationController
      
        begin
          if (!valid_start_date.nil? and !valid_end_date.nil?)
-             @sql= " date between '" + @start_date + "' and '" + @end_date + "'"
+             @sql= " date between '" +  Date.parse(@start_date.to_s).strftime("%Y-%m-%d") + "' and '" + Date.parse(@end_date.to_s).strftime("%Y-%m-%d") + "'"
              
              valid_number=/^\d+$/.match(@number)
              if !valid_number.nil? then @sql = @sql + " and number=" + @number end

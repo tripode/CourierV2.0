@@ -371,6 +371,7 @@ class ProductsController < ApplicationController
     @product=Product.new
     @details=Array.new
     @customers=Customer.all
+    $pdf = nil
     @retire_notes= RetireNote.where("date between current_date-31 and current_date and retire_note_state_id = 1")
     respond_to do |format|
       format.html # products_by_customer.html.erb
@@ -444,18 +445,18 @@ class ProductsController < ApplicationController
               format.pdf do
                 create_date=Date.today
                 create_date.strftime("%d-%m-%Y") if create_date
-                @file_path = "#{Rails.root}/app/views/reports/informe_Nota#{@retire_note_number}_#{@customer.company_name  + @customer.last_name  + @customer.name}_#{create_date}.pdf"
-                pdf = DeliveryReportPdf.new(@product_type,@customer,@employee,@details,delivery_report_products_url,root_url,@file_path, getMonth(Date.parse(@report_date).month),Date.parse(@report_date).year )
+                @file_name = "informe_Nota#{@retire_note_number}_#{@customer.company_name  + @customer.last_name  + @customer.name}_#{create_date}.pdf"
+                $pdf = DeliveryReportPdf.new(@product_type,@customer,@employee,@details,delivery_report_products_url,root_url,@file_path, getMonth(Date.parse(@report_date).month),Date.parse(@report_date).year )
                 begin
                 
-                  pdf.render_file(@file_path)
+                 # pdf.render_file(@file_path)
                 rescue
                   #no se guardo el archivo
                   CustomLogger.error("Error al crear pdf: #{pdf.inspect}, usuario: #{current_user.username}, #{Time.now}")
                 end
-                pdf.move_cursor_to 40
-                pdf.text("<u><a href='#{root_url}products/send_email?customer_id=#{@customer.id}&file_path=#{@file_path}&report_date=#{@report_date}' method='post'>Enviar</a></u>   <u><link href='#{delivery_report_products_url}'>Nuevo reporte</link></u>  <u><link href='#{root_url}main_page/index'>Cancelar</link></u> ",:inline_format => true, :page_number => "1")
-                send_data pdf.render, filename: "informe_#{@customer.company_name  + @customer.last_name  + @customer.name}_#{create_date}.pdf",
+                $pdf.move_cursor_to 40
+                $pdf.text("<u><a href='#{root_url}products/send_email?customer_id=#{@customer.id}&file_name=#{@file_name}&report_date=#{@report_date}' method='post'>Enviar</a></u>   <u><link href='#{delivery_report_products_url}'>Nuevo reporte</link></u>  <u><link href='#{root_url}main_page/index'>Cancelar</link></u> ",:inline_format => true, :page_number => "1")
+                send_data $pdf.render, filename: "informe_#{@customer.company_name  + @customer.last_name  + @customer.name}_#{create_date}.pdf",
                                       type: "application/pdf",
                                       disposition: "inline"
               end
@@ -468,11 +469,11 @@ class ProductsController < ApplicationController
   # Envia el pdf al email del cliente
   # 
   def send_email
-    @costumer_id = params[:customer_id]
-    @file_path = params[:file_path]
+    @customer_id = params[:customer_id]
+    @file_name = params[:file_name]
     @report_date=params[:report_date]
-    @costumer = Customer.find(@costumer_id)
-    EmailSender.eemail(@costumer.email, @file_path, @report_date).deliver
+    @customer = Customer.find(@customer_id)
+    EmailSender.eemail(@customer.email, @file_name, @report_date, $pdf).deliver
     CustomLogger.info("Se envia email a: #{@customer.inspect}, usuario: #{current_user.username}, #{Time.now}")
     respond_to do |format|
       format.html {redirect_to  delivery_report_products_path}

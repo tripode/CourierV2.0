@@ -5,7 +5,7 @@ ActionMailer::Base.smtp_settings = {
   :port                 => 587,  
   :domain               => "dsrepresentaciones.com",  
   :user_name            => "ds.representaciones.py@gmail.com",  
-  :password             => "tripodevs",  
+  :password             => "tripodevs2012",  
   :authentication       => "login",  
   :enable_starttls_auto => true  
 }

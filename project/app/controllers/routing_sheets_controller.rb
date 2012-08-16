@@ -304,7 +304,7 @@ class RoutingSheetsController < ApplicationController
         @sql = @sql + " and routing_sheet_state_id=" + @state_id
       end
       
-      @sql = @sql + " and date between '" + @date_start + "' and '" + @date_end + "'"
+      @sql = @sql + " and date between '" + Date.parse(@date_start.to_s).strftime("%Y-%m-%d") + "' and '" + Date.parse(@date_end.to_s).strftime("%Y-%m-%d") + "'"
       @routing_sheets= RoutingSheet.where(@sql)
       if(@routing_sheets.empty?) 
          @routing_sheets=Array.new 

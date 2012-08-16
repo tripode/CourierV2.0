@@ -20,7 +20,7 @@ class EmployeesController < ApplicationController
   # GET /employees.json
   def index
     #Para no mostrar el empleado oculto que se usa como superuser en la base de datos y el sistema
-    @employees = Employee.where("id != 1")
+    @employees = Employee.where("id != 1").limit(15)
  
     respond_to do |format|
       format.html # index.html.erb
@@ -46,7 +46,7 @@ class EmployeesController < ApplicationController
   # GET /employees/new.json
   def new
     #Para no mostrar el empleado oculto que se usa como superuser en la base de datos y el sistema
-    @employees = Employee.where("id != 1")
+    @employees = Employee.where("id != 1").limit(15)
     @employee = Employee.new
     respond_to do |format|
       format.html # new.html.erb

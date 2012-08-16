@@ -214,7 +214,7 @@ class InvoicesController < ApplicationController
     puts datefrom
     begin
       if !valid_start_date.nil? and !valid_end_date.nil?
-        @sql = " date between '" + datefrom + "' and '" + dateto + "' "
+        @sql = " date between '" +  Date.parse(datefrom.to_s).strftime("%Y-%m-%d") + "' and '" + Date.parse(dateto.to_s).strftime("%Y-%m-%d") + "' "
         
         valid_number= /^\s*[0-9]+-[0-9]+\s+[0-9]+\s*$/.match(number)
         if !valid_number.nil? then 
