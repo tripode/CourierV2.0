@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120729155745) do
+ActiveRecord::Schema.define(:version => 20120816225542) do
 
   create_table "areas", :force => true do |t|
     t.string  "area_name",   :limit => 50,  :null => false
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20120729155745) do
     t.string  "name",             :limit => 40
     t.string  "last_name",        :limit => 50
     t.string  "company_name",     :limit => 40
-    t.string  "ruc",              :limit => 10
+    t.string  "ruc",              :limit => nil
     t.string  "address",          :limit => 100
     t.integer "num_identify"
     t.string  "mobile_number",    :limit => 20
